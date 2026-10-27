@@ -1,33 +1,45 @@
-# World Map: Offline & Palantir
+# World Map
 
-A Windows desktop app with an interactive world map showing two things for every country:
+A desktop app for **Windows, macOS and Linux** with an interactive world map. It works fully offline. Click any country, or search for it, to see everything about it:
 
-- **% offline**: the share of people who don't use the internet, how many people that is, the country's rank and the trend since 2015 (World Bank / ITU data).
-- **Palantir**: every reported government contract, lawsuit, controversy, protest and policy decision involving Palantir, each with its date, status and a link to the source.
-
-Click a country, or search for it, to see its full details.
+- **% offline:** the share of people who don't use the internet, how many people that is, the country's rank and the trend since 2015.
+- **Conflicts:** every armed conflict from 1946 to today (wars between countries and civil wars), who fought whom, the years, and whether it is still active. Also territories claimed by more than one country.
+- **Military:** spending, personnel and arms trade; armed forces, branches and special forces units; and weapons, equipment and tech: aircraft and drones, warships, submarines, tanks, artillery, missiles, small arms, satellites, radar, bases, nuclear tests, plus crashes, shootdowns and sinkings.
+- **Palantir:** reported government contracts, lawsuits, controversies, protests and policy decisions, each with a source link.
 
 ## Download
 
-Get `WorldMap.exe` from the [Releases](../../releases) page and run it. No install needed, and it works offline.
+Get the latest version from the [Releases](../../releases) page:
+
+| System | File | How to open |
+|---|---|---|
+| Windows | `WorldMap.exe` | Double-click it. |
+| macOS | `WorldMap-macOS.zip` | Unzip, then right-click `WorldMap.app` and choose **Open** the first time (the app is not signed). |
+| Linux | `WorldMap-linux.tar.gz` | Extract, then run `WorldMap/WorldMap`. |
+
+## Data sources
+
+| Topic | Source |
+|---|---|
+| Internet use, population | World Bank / ITU |
+| Armed conflicts | [UCDP/PRIO Armed Conflict Dataset](https://ucdp.uu.se/downloads/), Uppsala University (conflicts with 25+ battle deaths in a year) |
+| Military spending, personnel, arms trade | World Bank / SIPRI |
+| Disputed territories, forces, special forces, equipment | [Wikidata](https://www.wikidata.org) (community-edited: coverage varies by country and includes historic items) |
+| Palantir | Hand-compiled from news reports, company filings and official records ([`app/assets/palantir.json`](app/assets/palantir.json)) |
 
 ## Yearly updates
 
-- **In the app:** once a year, on launch, the app downloads fresh World Bank data and the latest `palantir.json` from this repository, then reloads the map. Data is kept in `%APPDATA%\WorldMap`.
-- **On GitHub:** a workflow runs every 1 January. It refreshes the data, commits it and publishes a new release with a rebuilt `WorldMap.exe`.
+- **In the app:** once a year, on launch, the app downloads all the data again (including the latest `palantir.json` from this repository) and reloads the map. Data is kept in `%APPDATA%\WorldMap` (Windows), `~/Library/Application Support/WorldMap` (macOS) or `~/.local/share/WorldMap` (Linux).
+- **On GitHub:** a workflow runs every 1 January. It refreshes the data, commits it, and publishes a new release for all three systems. Pushing a `v*` tag also builds a release.
 
 ## Updating the Palantir list
 
-Edit [`app/assets/palantir.json`](app/assets/palantir.json). Each country has a `level` (4 = extensive use, 3 = active contracts, 2 = limited / ending / letter of intent, 1 = rejected or issues only) and a list of `items` with `type` (Contract, Legal, Controversy, Protest, Policy, Issue), `title`, `detail`, `date`, `status` and `source`. Installed apps pick up the change at their next yearly update.
-
-The list is hand-compiled from news reports, company filings and official records. It is not complete, and some items rest on a single source.
+Edit [`app/assets/palantir.json`](app/assets/palantir.json). Each country has a `level` (4 = extensive use, 3 = active contracts, 2 = limited / ending / letter of intent, 1 = rejected or issues only) and a list of `items` with `type` (Contract, Legal, Controversy, Protest, Policy, Issue), `title`, `detail`, `date`, `status` and `source`.
 
 ## Build it yourself
 
 ```bash
-cd app
-pip install pywebview pyinstaller pillow
-python make_icon.py
-python build_data.py
-pyinstaller --noconfirm --onefile --windowed --name WorldMap --icon icon.ico --add-data "assets;assets" --add-data "icon.ico;." main.py
+pip install pywebview pyinstaller pillow   # Linux: pip install "pywebview[qt]" pyinstaller pillow
+python app/build_data.py                   # optional: refresh all data
+python app/build.py                        # output goes to dist/
 ```
