@@ -103,7 +103,8 @@ def refresh_extra(countries, out_dir, log=print):
         return conf
 
     steps = {"conflicts": conflicts, "disputes": sources.fetch_disputes, "forces": sources.fetch_forces,
-             "equipment": sources.fetch_equipment, "military": sources.fetch_military_wb}
+             "equipment": sources.fetch_equipment, "military": sources.fetch_military_wb,
+             "people": sources.fetch_people}
     for key, fn in steps.items():
         try:
             extra[key] = fn()
@@ -113,6 +114,27 @@ def refresh_extra(countries, out_dir, log=print):
             log(f"{key}: failed, keeping previous data ({e})")
     extra["equipment_order"] = sources.EQUIP_ORDER
     extra["force_order"] = sources.FORCE_ORDER
+    extra["kind_order"] = {c: [k for k, _ in rules] for c, rules in sources.KIND_RULES.items()}
+
+    # Example photo for every kind of equipment: the pictured item operated by the most countries
+    seen = {}
+    for cats in extra.get("equipment", {}).values():
+        for cat, items in cats.items():
+            for it in items:
+                if it[4]:
+                    k = seen.setdefault((cat, it[1]), {})
+                    k[(it[0], it[4])] = k.get((it[0], it[4]), 0) + 1
+    examples = {}
+    for (cat, kind), counts in seen.items():
+        (name, img), _ = max(counts.items(), key=lambda kv: kv[1])
+        examples[kind] = {"name": name, "img": img}
+    people = extra.get("people", {})
+    wanted = [e["img"] for e in examples.values()]
+    wanted += [p["flag"] for p in people.values()]
+    wanted += [l["img"] for p in people.values() for l in p["leaders"]]
+    saved = sources.download_images(wanted, os.path.join(out_dir, "img"), log=log)
+    extra["kind_example"] = {k: {**e, "file": saved.get(e["img"], "")} for k, e in examples.items()}
+    extra["img"] = saved  # Commons file name -> file in img/ (works offline)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(extra, f, ensure_ascii=False)
     with open(os.path.join(out_dir, "extra.js"), "w", encoding="utf-8") as f:

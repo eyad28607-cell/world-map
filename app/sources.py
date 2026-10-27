@@ -5,6 +5,7 @@ import csv
 import datetime
 import io
 import json
+import os
 import re
 import time
 import urllib.parse
@@ -37,6 +38,11 @@ def _sparql(query, tries=3):
 
 def _qid(uri):
     return uri.rsplit("/", 1)[-1]
+
+
+def commons_file(url):
+    """Wikimedia Commons file name from a Wikidata image URL."""
+    return urllib.parse.unquote(url.rsplit("/", 1)[-1]) if url else ""
 
 
 # ---------- World Bank military indicators ----------
@@ -225,7 +231,8 @@ def fetch_forces():
           ?sub wdt:P279* wd:{t} . ?u wdt:P31 ?sub . ?u wdt:P17 ?c . ?c wdt:P298 ?iso .
           OPTIONAL {{ ?u rdfs:label ?uLabel FILTER(lang(?uLabel)="en") }}
           OPTIONAL {{ ?u schema:description ?desc FILTER(lang(?desc)="en") }}
-          OPTIONAL {{ ?u wdt:P576 ?ended }} }}""")
+          OPTIONAL {{ ?u wdt:P576 ?ended }} OPTIONAL {{ ?u wdt:P154|wdt:P94|wdt:P18 ?img }} }}""".replace(
+            "SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended", "SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img"))
         for r in rows:
             if not r["uLabel"]:
                 continue
@@ -233,7 +240,10 @@ def fetch_forces():
             prev = best.get(key)
             if prev is None or FORCE_ORDER.index(kind) < FORCE_ORDER.index(prev["kind"]):
                 best[key] = {"name": r["uLabel"], "desc": r["desc"], "kind": kind,
-                             "ended": r["ended"][:4] if r["ended"] else "", "q": _qid(r["u"])}
+                             "ended": r["ended"][:4] if r["ended"] else "", "q": _qid(r["u"]),
+                             "img": commons_file(r["img"])}
+            elif not prev["img"] and r["img"]:
+                prev["img"] = commons_file(r["img"])
     out = {}
     for (iso, _), v in best.items():
         out.setdefault(iso, []).append(v)
@@ -279,31 +289,159 @@ def _equip_category(label):
     return None
 
 
+# Readable kinds inside each category, matched against the item's description and type; first match wins
+KIND_RULES = {
+    "Aircraft & drones": [
+        ("Drones (unmanned aircraft)", ["unmanned", "drone", "uav", "ucav"]),
+        ("Helicopters", ["helicopter", "rotorcraft", "tiltrotor"]),
+        ("Fighter jets", ["fighter", "interceptor", "multirole combat"]),
+        ("Bombers", ["bomber"]),
+        ("Attack aircraft", ["attack aircraft", "ground-attack", "ground attack", "close air support", "strike aircraft"]),
+        ("Spy, patrol & early-warning aircraft", ["reconnaissance", "surveillance", "early warning", "awacs",
+                                                  "maritime patrol", "patrol aircraft", "electronic warfare", "spy"]),
+        ("Tankers & transport aircraft", ["tanker", "transport", "cargo", "airlifter", "refuel", "airliner", "utility"]),
+        ("Training aircraft", ["trainer", "training"]),
+    ],
+    "Warships & boats": [
+        ("Aircraft carriers", ["aircraft carrier", "helicopter carrier", "carrier"]),
+        ("Battleships", ["battleship", "dreadnought", "battlecruiser"]),
+        ("Cruisers", ["cruiser"]),
+        ("Destroyers", ["destroyer"]),
+        ("Frigates", ["frigate"]),
+        ("Corvettes", ["corvette"]),
+        ("Amphibious & landing ships", ["landing", "amphibious", "dock"]),
+        ("Mine warfare ships", ["mine"]),
+        ("Patrol boats & coast guard", ["patrol", "cutter", "coast guard", "gunboat", "fast attack", "missile boat",
+                                        "torpedo boat"]),
+        ("Support & supply ships", ["oiler", "tender", "tug", "replenishment", "supply", "hospital", "auxiliary",
+                                    "transport", "cargo", "survey", "research", "icebreaker", "training"]),
+    ],
+    "Submarines": [
+        ("Nuclear missile submarines", ["ballistic missile submarine", "ballistic"]),
+        ("Nuclear attack submarines", ["nuclear"]),
+        ("Diesel-electric submarines", ["diesel", "conventional"]),
+    ],
+    "Tanks & armoured vehicles": [
+        ("Infantry fighting vehicles", ["infantry fighting"]),
+        ("Armoured personnel carriers", ["personnel carrier", "apc"]),
+        ("Self-propelled guns & rocket launchers", ["self-propelled", "multiple rocket", "rocket launcher"]),
+        ("Recovery & engineering vehicles", ["recovery", "engineering", "bridge", "mine-clearing"]),
+        ("Main battle tanks", ["main battle tank"]),
+        ("Light & other tanks", ["tank"]),
+        ("Scout & armoured cars", ["armoured car", "armored car", "reconnaissance", "scout"]),
+        ("Trucks & utility vehicles", ["truck", "utility", "jeep", "light vehicle", "transport"]),
+    ],
+    "Missiles, rockets & torpedoes": [
+        ("Intercontinental & ballistic missiles", ["ballistic"]),
+        ("Cruise missiles", ["cruise"]),
+        ("Anti-ship missiles", ["anti-ship"]),
+        ("Air-to-air missiles", ["air-to-air"]),
+        ("Surface-to-air & air-defence missiles", ["surface-to-air", "anti-aircraft", "air defense", "air defence",
+                                                    "anti-ballistic", "sam "]),
+        ("Anti-tank missiles", ["anti-tank", "antitank"]),
+        ("Air-to-ground missiles", ["air-to-surface", "air-to-ground"]),
+        ("Torpedoes", ["torpedo"]),
+        ("Bombs", ["bomb"]),
+        ("Rockets", ["rocket"]),
+    ],
+    "Artillery": [
+        ("Howitzers", ["howitzer"]),
+        ("Mortars", ["mortar"]),
+        ("Rocket artillery", ["rocket"]),
+        ("Air-defence guns", ["anti-aircraft", "air defense", "air defence"]),
+        ("Anti-tank guns", ["anti-tank"]),
+        ("Field guns & cannons", ["gun", "cannon"]),
+    ],
+    "Small arms": [
+        ("Sniper rifles", ["sniper", "marksman"]),
+        ("Assault rifles", ["assault rifle"]),
+        ("Submachine guns", ["submachine"]),
+        ("Machine guns", ["machine gun"]),
+        ("Battle & other rifles", ["rifle", "carbine"]),
+        ("Pistols & revolvers", ["pistol", "revolver", "handgun"]),
+        ("Shotguns", ["shotgun"]),
+        ("Grenades & grenade launchers", ["grenade"]),
+        ("Rocket & anti-tank launchers", ["launcher", "anti-tank", "rocket"]),
+        ("Knives & bayonets", ["knife", "bayonet"]),
+    ],
+    "Satellites & space": [
+        ("Spy & reconnaissance satellites", ["reconnaissance", "spy", "intelligence", "surveillance", "imaging"]),
+        ("Communication satellites", ["communication"]),
+        ("Navigation satellites", ["navigation", "gps", "glonass", "positioning"]),
+        ("Early-warning satellites", ["early warning", "missile warning"]),
+        ("Weather satellites", ["weather", "meteorolog"]),
+    ],
+    "Radar, electronics & other tech": [
+        ("Radars", ["radar"]),
+        ("Sonars", ["sonar"]),
+        ("Electronic warfare & jamming", ["jammer", "countermeasure", "electronic warfare", "decoy"]),
+        ("Communications", ["communication", "radio"]),
+        ("Computers & software", ["computer", "software"]),
+    ],
+    "Bases": [
+        ("Air bases", ["air base", "airbase", "air force station", "airfield", "air station"]),
+        ("Naval bases", ["naval", "navy", "port"]),
+        ("Army bases & barracks", ["barracks", "army", "fort", "garrison", "camp"]),
+    ],
+    "Nuclear tests": [
+        ("Underground tests", ["underground"]),
+        ("Atmospheric & other tests", []),
+    ],
+    "Incidents: crashes, shootdowns & sinkings": [
+        ("Shootdowns", ["shootdown", "shot down"]),
+        ("Crashes", ["crash", "accident"]),
+        ("Sinkings & ship disasters", ["sinking", "sank", "collision", "explosion", "disaster"]),
+    ],
+}
+
+
+def _kind(cat, desc, type_label):
+    text = f"{desc or ''} {type_label or ''}".lower()
+    for kind, words in KIND_RULES.get(cat, []):
+        if not words or any(w in text for w in words):
+            return kind
+    return "Other " + cat.split(":")[0].split(" & ")[0].split(",")[0].lower()
+
+
 def fetch_equipment():
-    """{iso3: {category: [[name, type], ...]}} for equipment operated by a country or its forces."""
-    label = """OPTIONAL { ?e wdt:P31 ?t . ?t rdfs:label ?tLabel FILTER(lang(?tLabel)="en") }
+    """{iso3: {category: [[name, kind, description, origin iso3], ...]}} for equipment a country or its forces operate."""
+    fields = """OPTIONAL { ?e wdt:P31 ?t . ?t rdfs:label ?tLabel FILTER(lang(?tLabel)="en") }
+      OPTIONAL { ?e schema:description ?desc FILTER(lang(?desc)="en") }
+      OPTIONAL { ?e wdt:P495 ?o . ?o wdt:P298 ?origin }
+      OPTIONAL { ?e wdt:P18 ?img }
       ?e rdfs:label ?eLabel FILTER(lang(?eLabel)="en") }"""
+    head = 'SELECT DISTINCT ?e ?eLabel ?tLabel ?desc ?origin ?img ?iso WHERE { hint:Query hint:optimizer "None" .'
     # operated by a country directly
-    rows = _sparql(f"""SELECT DISTINCT ?e ?eLabel ?tLabel ?iso WHERE {{ hint:Query hint:optimizer "None" .
-      ?c wdt:P298 ?iso . ?e wdt:P137 ?c . {label}""")
+    rows = _sparql(f"{head} ?c wdt:P298 ?iso . ?e wdt:P137 ?c . {fields}")
     # operated by one of a country's forces (one query per kind of force keeps each under the time limit)
     for ot in ("Q772547", "Q781132", "Q61883", "Q4508", "Q37726", "Q8473", "Q176799"):
-        rows += _sparql(f"""SELECT DISTINCT ?e ?eLabel ?tLabel ?iso WHERE {{ hint:Query hint:optimizer "None" .
-          ?op wdt:P31 wd:{ot} . ?op wdt:P17 ?c . ?c wdt:P298 ?iso . ?e wdt:P137 ?op . {label}""")
-    seen, out = {}, {}
+        rows += _sparql(f"{head} ?op wdt:P31 wd:{ot} . ?op wdt:P17 ?c . ?c wdt:P298 ?iso . ?e wdt:P137 ?op . {fields}")
+    items = {}  # an item can have several types; keep the first one that maps to a category
     for r in rows:
-        cat = _equip_category(r["tLabel"])
         name = r["eLabel"]
-        if not cat or not name or re.fullmatch(r"Q\d+", name):
+        if not name or re.fullmatch(r"Q\d+", name):
             continue
-        key = (r["iso"], _qid(r["e"]))
-        if key in seen:
+        it = items.setdefault((r["iso"], _qid(r["e"])), {"name": name, "types": [], "desc": "", "origin": "", "img": ""})
+        if r["tLabel"] and r["tLabel"] not in it["types"]:
+            it["types"].append(r["tLabel"])
+        it["desc"] = it["desc"] or r["desc"]
+        it["origin"] = it["origin"] or r["origin"]
+        it["img"] = it["img"] or commons_file(r["img"])
+    out = {}
+    for (iso, _), it in items.items():
+        cat, typ = None, ""
+        for t in it["types"]:
+            cat = _equip_category(t)
+            if cat:
+                typ = t
+                break
+        if not cat:
             continue
-        seen[key] = 1
-        out.setdefault(r["iso"], {}).setdefault(cat, []).append([name, r["tLabel"]])
+        out.setdefault(iso, {}).setdefault(cat, []).append(
+            [it["name"], _kind(cat, it["desc"], typ), it["desc"], it["origin"] if it["origin"] != iso else "", it["img"]])
     for cats in out.values():
         for v in cats.values():
-            v.sort(key=lambda x: x[0].lower())
+            v.sort(key=lambda x: (x[1], x[0].lower()))
     return out
 
 
@@ -336,3 +474,64 @@ def fetch_disputes():
     for v in out.values():
         v.sort(key=lambda x: x["name"])
     return out
+
+
+def fetch_people():
+    """{iso3: {"flag": file, "leaders": [{role, name, desc, img}]}}: each country's flag and current leaders."""
+    rows = _sparql("""SELECT ?iso ?flag ?role ?p ?pLabel ?desc ?img WHERE { hint:Query hint:optimizer "None" .
+      ?c wdt:P31 wd:Q3624078 . ?c wdt:P298 ?iso .
+      OPTIONAL { ?c wdt:P41 ?flag }
+      OPTIONAL { VALUES (?prop ?role) { (wdt:P35 "Head of state") (wdt:P6 "Head of government") }
+                 ?c ?prop ?p . ?p rdfs:label ?pLabel FILTER(lang(?pLabel)="en")
+                 OPTIONAL { ?p schema:description ?desc FILTER(lang(?desc)="en") }
+                 OPTIONAL { ?p wdt:P18 ?img } } }""")
+    out = {}
+    for r in rows:
+        c = out.setdefault(r["iso"], {"flag": "", "leaders": []})
+        c["flag"] = c["flag"] or commons_file(r["flag"])
+        if r["pLabel"] and not any(l["name"] == r["pLabel"] and l["role"] == r["role"] for l in c["leaders"]):
+            c["leaders"].append({"role": r["role"], "name": r["pLabel"], "desc": r["desc"], "img": commons_file(r["img"])})
+        elif r["pLabel"] and r["img"]:
+            for l in c["leaders"]:
+                if l["name"] == r["pLabel"] and not l["img"]:
+                    l["img"] = commons_file(r["img"])
+    for c in out.values():
+        c["leaders"].sort(key=lambda l: l["role"] != "Head of state")
+    return out
+
+
+def download_images(files, img_dir, width=240, log=print):
+    """Saves Commons thumbnails into img_dir. Returns {file name: saved file name}; already saved files are reused."""
+    import concurrent.futures
+    import hashlib
+    os.makedirs(img_dir, exist_ok=True)
+    have = {os.path.splitext(f)[0]: f for f in os.listdir(img_dir)}
+    result = {}
+
+    def one(name):
+        key = hashlib.md5(name.encode("utf-8")).hexdigest()[:16]
+        if key in have:
+            return name, have[key]
+        url = "https://commons.wikimedia.org/wiki/Special:FilePath/" + urllib.parse.quote(name) + f"?width={width}"
+        for n in range(3):
+            try:
+                req = urllib.request.Request(url, headers=UA)
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    data, ctype = r.read(), r.headers.get("Content-Type", "")
+                break
+            except OSError:
+                if n == 2:
+                    return name, None
+                time.sleep(3 * (n + 1))
+        ext = ".png" if "png" in ctype else ".gif" if "gif" in ctype else ".svg" if "svg" in ctype else ".jpg"
+        with open(os.path.join(img_dir, key + ext), "wb") as f:
+            f.write(data)
+        return name, key + ext
+
+    names = sorted({f for f in files if f})
+    with concurrent.futures.ThreadPoolExecutor(4) as pool:
+        for name, saved in pool.map(one, names):
+            if saved:
+                result[name] = saved
+    log(f"images: {len(result)} of {len(names)} saved")
+    return result

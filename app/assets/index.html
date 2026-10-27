@@ -4,6 +4,7 @@
 <script src="plotly.min.js"></script>
 <script src="data.js"></script>
 <script src="extra.js"></script>
+<script src="guide.js"></script>
 <style>
 :root{--bg:#fafaf8;--fg:#1d1d1b;--muted:#6b6b66;--card:#fff;--line:#e3e2dc;--accent:#2a6fdb;--warm:#c2410c;--soft:#f3f2ee;
  --t-contract:#2a6fdb;--t-legal:#7c3aed;--t-controversy:#c2410c;--t-protest:#be123c;--t-policy:#0f766e;--t-issue:#a16207}
@@ -14,7 +15,7 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,"Segoe UI",sans-serif;display:flex;flex-direction:column}
 header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
 h1{font-size:17px;margin:0;flex:1 1 auto}
-.tabs{display:flex;gap:6px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
 button{font:inherit;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
 button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 input{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);width:220px}
@@ -55,11 +56,30 @@ details .row small{color:var(--muted)}
 .conf .meta{color:var(--muted);font-size:12px}
 .live{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;background:#be123c;color:#fff;margin-right:6px}
 .ffind{width:100%;margin:4px 0 6px}
+.explain{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.titlebar{display:flex;align-items:center;gap:10px}
+.flag{height:28px;border-radius:3px;border:1px solid var(--line)}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.person{display:flex;gap:8px;align-items:center;background:var(--soft);border-radius:8px;padding:6px}
+.person img,.person .ph{width:52px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
+.person b{display:block;font-size:13px;line-height:1.3}
+.person span{font-size:11px;color:var(--muted)}
+.kind{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;padding-top:8px;border-top:2px solid var(--line)}
+.kind img{width:96px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
+.kind b{display:block}
+.kind p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.row.pic{cursor:pointer}
+.row.pic::after{content:" 📷";font-size:11px}
+.row .shot{display:block;max-width:100%;max-height:220px;border-radius:6px;margin:6px 0}
+.row .off{display:block;font-size:12px;color:var(--muted);margin:4px 0}
+.gcard{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.gcard img{width:110px;height:72px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
+.gcard b{display:block}.gcard p{margin:2px 0 0;font-size:13px;color:var(--muted)}
 @media (max-width:800px){.wrap{grid-template-columns:1fr;grid-template-rows:55vh auto}aside{border-left:0;border-top:1px solid var(--line)}input{width:100%}}
 </style></head><body>
 <header>
- <h1>World map: offline population and Palantir use</h1>
- <div class="tabs"><button id="b1" class="on">% offline</button><button id="b3">Conflicts</button><button id="b4">Military</button><button id="b2">Palantir</button></div>
+ <h1>World Map</h1>
+ <div class="tabs"><button id="b1" class="on">% offline</button><button id="b3">Conflicts</button><button id="b4">Military</button><button id="b2">Palantir</button><button id="bg">Guide</button></div>
  <input id="q" list="names" placeholder="Search a country…"><datalist id="names"></datalist>
 </header>
 <div class="wrap"><div id="map"></div><aside id="panel"></aside></div>
@@ -121,29 +141,71 @@ function confHtml(c,iso){
  const own=sp&&(sp[0]!=c.first||sp[1]!=c.last)?` · ${esc(nm(iso))} involved ${sp[0]}–${sp[1]==X.ucdp_last_year&&c.active?'present':sp[1]}`:'';
  return `<div class="conf" style="--c:${live?'#be123c':'var(--line)'}">${live?'<span class="live">ACTIVE</span>':''}<b>${esc(c.location)}${c.territory?': '+esc(c.territory):''}</b>
  ${esc(sides(c.side_a))} <i>vs</i> ${esc(sides(c.side_b))}
- <div class="meta">${c.first}–${c.active?'present':c.last}${own} · ${c.years_active} year(s) of fighting${c.war_years?`, ${c.war_years} at war level (1,000+ deaths/yr)`:''} · ${esc(c.type)} · over ${esc(c.incompatibility.toLowerCase())}${other.length?` · other countries involved: ${esc(sides(other))}`:''}</div></div>`;
+ <div class="meta">${c.first}–${c.active?'present':c.last}${own} · ${c.years_active} year(s) of fighting${c.war_years?`, ${c.war_years} at war level (1,000+ deaths/yr)`:''} · <span title="${esc(INFO[c.type]||'')}">${esc(c.type)}</span> · over ${esc(c.incompatibility.toLowerCase())}${other.length?` · other countries involved: ${esc(sides(other))}`:''}</div></div>`;
 }
 function conflictBlock(iso){
  const cs=confOf[iso]||[],ds=DISP[iso]||[];
  if(!cs.length&&!ds.length)return `<p class="none">No armed conflicts (25+ deaths a year) since 1946 and no disputed territories in the data.</p>`;
  const act=cs.filter(c=>isActive(c,iso)),past=cs.filter(c=>!isActive(c,iso));
- return `<div class="stats"><div class="stat"><b>${act.length}</b><span>active conflicts (${X.ucdp_last_year})</span></div><div class="stat"><b>${cs.length}</b><span>conflicts since 1946</span></div></div>`
+ return `<p class="explain">Every armed conflict with 25+ battle deaths in a year that ${esc(nm(iso))} fought in or that took place on its land. Hover a conflict type for what it means, or open the Guide.</p><div class="stats"><div class="stat"><b>${act.length}</b><span>active conflicts (${X.ucdp_last_year})</span></div><div class="stat"><b>${cs.length}</b><span>conflicts since 1946</span></div></div>`
  +(act.length?section('Active conflicts',act.length,()=>act.map(c=>confHtml(c,iso)).join(''),true):'')
  +(past.length?section('Past conflicts',past.length,()=>past.map(c=>confHtml(c,iso)).join('')):'')
  +(ds.length?section('Disputed territories',ds.length,()=>ds.map(d=>`<div class="row"><b>${esc(d.name)}</b> <small>${esc(d.desc||'')}</small><br><small>Claimed by: ${esc(d.claimants.map(nm).join(', '))}</small></div>`).join('')):'');
+}
+// ----- photos: saved ones work offline, the rest load from Wikimedia Commons when online -----
+const IMG=X.img||{};
+const localImg=f=>f&&IMG[f]?'img/'+IMG[f]:'';
+const webImg=(f,w)=>'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(f)+'?width='+(w||360);
+const anyImg=f=>localImg(f)||(f?webImg(f,240):'');
+const explain=k=>INFO[k]?`<p class="explain">${esc(INFO[k])}</p>`:'';
+function photo(row){ // clicking an item shows its photo
+ const f=row.dataset.img;if(!f)return;
+ const s=row.querySelector('.shot,.off');if(s){s.remove();return;}
+ const im=document.createElement('img');im.className='shot';im.alt='';im.src=localImg(f)||webImg(f);
+ im.onerror=()=>{const p=document.createElement('span');p.className='off';p.textContent='Photo needs an internet connection.';im.replaceWith(p);};
+ row.appendChild(im);
+}
+const picRow=(f,inner)=>`<div class="row${f?' pic':''}" ${f?`data-img="${esc(f)}" onclick="photo(this)"`:''}>${inner}</div>`;
+function kindHead(kind,n){
+ const ex=(X.kind_example||{})[kind],src=ex&&(localImg(ex.img)||'');
+ return `<div class="kind">${src?`<img src="${src}" alt="" title="Example: ${esc(ex.name)}">`:''}<div><b>${esc(kind)} (${n})</b><p>${esc(INFO[kind]||'')}${src?` <i>Photo: ${esc(ex.name)}.</i>`:''}</p></div></div>`;
+}
+function equipList(cat,items){
+ const order=(X.kind_order||{})[cat]||[],groups={};
+ items.forEach(e=>(groups[e[1]]=groups[e[1]]||[]).push(e));
+ const ks=Object.keys(groups).sort((a,b)=>((order.indexOf(a)+1)||99)-((order.indexOf(b)+1)||99));
+ return explain(cat)+`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+ks.map(k=>kindHead(k,groups[k].length)+groups[k].map(e=>
+  picRow(e[4],`<b>${esc(e[0])}</b>${e[3]?` <small>· made in ${esc(nm(e[3]))}</small>`:''}${e[2]?`<br><small>${esc(e[2])}</small>`:''}`)).join('')).join('');
 }
 function militaryBlock(iso){
  const m=MIL[iso]||{},fs=FORCES[iso]||[],eq=EQUIP[iso]||{};
  const st=(k,f,l)=>m[k]?`<div class="stat"><b>${f(m[k][0])}</b><span>${l} (${m[k][1]})</span></div>`:'';
  let h=`<div class="stats">${st('mil_usd',money,'military spending')}${st('mil_pct_gdp',v=>v+'%','of GDP')}${st('mil_personnel',fmt,'armed forces personnel')}${st('arms_imports',money,'arms imports*')}${st('arms_exports',money,'arms exports*')}</div>`;
  const kinds=X.force_order.filter(k=>fs.some(f=>f.kind==k));
- kinds.forEach(k=>{const l=fs.filter(f=>f.kind==k);h+=section(k=='Other branch'?'Other branches & units':k,l.length,()=>`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+l.map(f=>`<div class="row"><b>${esc(f.name)}</b>${f.ended?` <small>(disbanded ${esc(f.ended)})</small>`:''}<br><small>${esc(f.desc||'')}</small></div>`).join(''),k=='Special forces')});
+ if(kinds.length)h+=`<p class="explain">Click a name with 📷 to see its badge or photo.</p>`;
+ kinds.forEach(k=>{const l=fs.filter(f=>f.kind==k);h+=section(k=='Other branch'?'Other branches & units':k,l.length,()=>explain(k)+`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+l.map(f=>picRow(f.img,`<b>${esc(f.name)}</b>${f.ended?` <small>(disbanded ${esc(f.ended)})</small>`:''}${f.desc?`<br><small>${esc(f.desc)}</small>`:''}`)).join(''),k=='Special forces')});
  const cats=X.equipment_order.filter(c=>eq[c]);
- if(cats.length)h+=`<h3>Weapons, equipment & tech (${eqN(iso).toLocaleString()})</h3>`;
- cats.forEach(c=>{h+=section(c,eq[c].length,()=>`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+eq[c].map(e=>`<div class="row">${esc(e[0])} <small>${esc(e[1])}</small></div>`).join(''))});
+ if(cats.length)h+=`<h3>Weapons, equipment & tech (${eqN(iso).toLocaleString()})</h3><p class="explain">Grouped by kind, with an explanation and an example photo for each kind. Click a name with 📷 to see its own photo.</p>`;
+ cats.forEach(c=>{h+=section(c,eq[c].length,()=>equipList(c,eq[c]))});
  if(!fs.length&&!cats.length&&!m.mil_usd)h+=`<p class="none">No military data for this country.</p>`;
  return h;
 }
+function leadersBlock(iso){
+ const p=(X.people||{})[iso];if(!p||!p.leaders.length)return '';
+ return `<div class="people">${p.leaders.map(l=>{const src=localImg(l.img);return `<div class="person">${src?`<img src="${src}" alt="">`:'<div class="ph"></div>'}<div><span>${esc(l.role)}</span><b>${esc(l.name)}</b><span>${esc(l.desc||'')}</span></div></div>`}).join('')}</div>`;
+}
+function guide(){
+ const cards=(list)=>list.map(k=>{const ex=(X.kind_example||{})[k],src=ex&&localImg(ex.img);
+  return `<div class="gcard">${src?`<img src="${src}" alt="" title="${esc(ex.name)}">`:''}<div><b>${esc(k)}</b><p>${esc(INFO[k]||'')}${src?` <i>Photo: ${esc(ex.name)}.</i>`:''}</p></div></div>`}).join('');
+ panel.innerHTML=`<a class="back" onclick="world()">← World overview</a><h2>Guide</h2><p class="sub">What every topic, kind of weapon and military term in this app means.</p>
+ <h3>Topics</h3>${GUIDE_TOPICS.map(([t,d])=>`<div class="gcard"><div><b>${esc(t)}</b><p>${esc(d)}</p></div></div>`).join('')}
+ <h3>Kinds of conflict</h3>${cards(Object.values(CTYPES))}
+ <h3>Military forces</h3>${cards(['Armed forces','Army','Navy','Air force','Special forces','Other branch'])}
+ ${X.equipment_order.map(c=>section(c,((X.kind_order||{})[c]||[]).length,()=>explain(c)+cards((X.kind_order||{})[c]||[]))).join('')}
+ ${note()}`;
+ panel.scrollTop=0;q.value='';
+}
+const CTYPES={1:'Between countries (interstate)',2:'Civil war (intrastate)',3:'Civil war with foreign troops (internationalized)',4:'Colonial (extrasystemic)'};
 function trend(h){
  const W=360,H=90,p=22,xs=h.map(r=>r[0]),y0=xs[0],y1=xs[xs.length-1];
  const X=y=>p+(W-2*p)*(y1==y0?0:(y-y0)/(y1-y0)),Y=v=>H-16-(H-26)*v/100;
@@ -168,11 +230,12 @@ function wireFilters(id){
   document.querySelectorAll(`#${id}-list .item`).forEach(el=>el.style.display=!t||el.dataset.t==t?'':'none');};
 }
 const note=()=>`<p class="note">Offline data: World Bank / ITU, rebuilt ${esc(META.built)}. People offline = population × % offline.<br>
-Conflicts: UCDP/PRIO Armed Conflict Dataset v${esc(X.ucdp_version)} (Uppsala University), every armed conflict with 25+ battle deaths in a year, 1946–${X.ucdp_last_year}. Disputed territories, armed forces, special forces and equipment: Wikidata (community-edited, so some entries are missing or historic). Military spending, personnel and arms trade: World Bank / SIPRI. *Arms trade is in SIPRI trend-indicator values, not exact dollars.<br>Palantir list last updated ${esc(META.palantir_updated)}. Hand-compiled from news reports, company filings and official records; it is not complete and some items are single-source. Click "Source" to read the original.</p>`;
+Conflicts: UCDP/PRIO Armed Conflict Dataset v${esc(X.ucdp_version)} (Uppsala University), every armed conflict with 25+ battle deaths in a year, 1946–${X.ucdp_last_year}. Disputed territories, armed forces, special forces and equipment: Wikidata (community-edited, so some entries are missing or historic). Military spending, personnel and arms trade: World Bank / SIPRI. *Arms trade is in SIPRI trend-indicator values, not exact dollars. Flags, leaders and photos: Wikidata and Wikimedia Commons (each photo under its own free licence); leaders are as recorded on Wikidata and may be out of date.<br>Palantir list last updated ${esc(META.palantir_updated)}. Hand-compiled from news reports, company filings and official records; it is not complete and some items are single-source. Click "Source" to read the original.</p>`;
 function country(d){
  const h=d.history.map(r=>[r[0],+(100-r[1]).toFixed(1)]),first=h[0],change=+(d.offline-first[1]).toFixed(1),pc=PC[d.iso3];
  panel.innerHTML=`<a class="back" onclick="world()">← World overview</a>
- <h2>${esc(d.name)}</h2><p class="sub">${esc(d.region)}</p>
+ <div class="titlebar">${(()=>{const f=localImg(((X.people||{})[d.iso3]||{}).flag);return f?`<img class="flag" src="${f}" alt="">`:''})()}<div><h2>${esc(d.name)}</h2><p class="sub">${esc(d.region)}</p></div></div>
+ ${leadersBlock(d.iso3)}
  <h3>Offline population</h3>
  <div class="stats">
   <div class="stat"><b>${d.offline}%</b><span>offline (${d.year})</span></div>
@@ -216,7 +279,7 @@ function world(){
 }
 names.innerHTML=D.map(d=>`<option value="${esc(d.name)}">`).join('');
 q.addEventListener('change',()=>{const d=byName[q.value.trim().toLowerCase()];if(d)country(d)});
-b1.onclick=()=>show(1);b2.onclick=()=>show(2);b3.onclick=()=>show(3);b4.onclick=()=>show(4);
+b1.onclick=()=>show(1);b2.onclick=()=>show(2);b3.onclick=()=>show(3);b4.onclick=()=>show(4);bg.onclick=guide;
 show(1);world();
 document.getElementById('map').on('plotly_click',e=>{const d=byIso[e.points[0].location];if(d)country(d)});
 </script></body></html>

@@ -16,7 +16,7 @@ import webview
 
 import build_data
 
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.3.0"
 REPO = "eyad28607-cell/world-map"
 PALANTIR_URL = f"https://raw.githubusercontent.com/{REPO}/main/app/assets/palantir.json"
 UPDATE_EVERY_DAYS = 365

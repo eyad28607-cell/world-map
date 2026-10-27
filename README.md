@@ -6,6 +6,8 @@ A desktop app for **Windows, macOS and Linux** with an interactive world map. It
 - **Conflicts:** every armed conflict from 1946 to today (wars between countries and civil wars), who fought whom, the years, and whether it is still active. Also territories claimed by more than one country.
 - **Military:** spending, personnel and arms trade; armed forces, branches and special forces units; and weapons, equipment and tech: aircraft and drones, warships, submarines, tanks, artillery, missiles, small arms, satellites, radar, bases, nuclear tests, plus crashes, shootdowns and sinkings.
 - **Palantir:** reported government contracts, lawsuits, controversies, protests and policy decisions, each with a source link.
+- **People and photos:** each country's flag and current head of state and head of government. Weapons are grouped by kind (fighter jets, destroyers, assault rifles…) with a plain explanation and example photo for each kind; click any item to see its own photo when online.
+- **Guide:** plain-language explanations of every topic, kind of conflict, military branch and kind of weapon.
 
 ## Download
 
@@ -25,6 +27,7 @@ Get the latest version from the [Releases](../../releases) page:
 | Armed conflicts | [UCDP/PRIO Armed Conflict Dataset](https://ucdp.uu.se/downloads/), Uppsala University (conflicts with 25+ battle deaths in a year) |
 | Military spending, personnel, arms trade | World Bank / SIPRI |
 | Disputed territories, forces, special forces, equipment | [Wikidata](https://www.wikidata.org) (community-edited: coverage varies by country and includes historic items) |
+| Flags, leaders, photos | Wikidata and [Wikimedia Commons](https://commons.wikimedia.org) (each photo under its own free licence) |
 | Palantir | Hand-compiled from news reports, company filings and official records ([`app/assets/palantir.json`](app/assets/palantir.json)) |
 
 ## Yearly updates
