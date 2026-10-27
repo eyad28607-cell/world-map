@@ -6,6 +6,15 @@ window.INFO = {
   "Navy": "The sea force: warships, submarines, naval aircraft and marines.",
   "Air force": "The air force: fighter jets, bombers, transport planes, drones and air defence.",
   "Special forces": "Small, highly trained units for secret or very dangerous missions, such as hostage rescue, raids behind enemy lines and counter-terrorism.",
+  "Paramilitary, militias & guerrillas": "Armed groups organised like a military but outside the regular armed forces: gendarmeries and border guards, part-time militias, and rebel or guerrilla forces.",
+  "Academies & training units": "Military academies, schools and training units that turn recruits into soldiers and officers.",
+  "Commands & military districts": "Headquarters that lead many units, or regions into which a country's forces are divided.",
+  "Armies, corps & divisions": "The largest fighting formations: a division has roughly 10,000–20,000 soldiers; corps and field armies combine several divisions.",
+  "Brigades & regiments": "Mid-sized formations of a few thousand soldiers, often built around one kind of fighting (infantry, armour, artillery).",
+  "Battalions, companies & batteries": "Smaller units: a battalion has a few hundred soldiers, a company about 100–200, and a battery is an artillery company.",
+  "Air squadrons, groups & wings": "Air force units: a squadron has around 12–24 aircraft; groups and wings combine several squadrons.",
+  "Fleets, flotillas & naval units": "Groups of warships, and naval and marine units.",
+  "Other units": "Other military units recorded on Wikidata.",
   "Other branch": "Other parts of the military, such as marines, coast guards, national guards, border troops, space forces and individual regiments or brigades.",
 
   // ----- equipment categories -----

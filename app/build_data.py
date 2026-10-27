@@ -85,7 +85,7 @@ def write(rows, pal, out_dir, csv_path=None):
     return meta
 
 
-def refresh_extra(countries, out_dir, log=print):
+def refresh_extra(countries, out_dir, log=print, only=None):
     """Downloads conflicts and military data into extra.js. A source that fails keeps its previous data."""
     path = os.path.join(out_dir, "extra.json")
     try:
@@ -104,8 +104,10 @@ def refresh_extra(countries, out_dir, log=print):
 
     steps = {"conflicts": conflicts, "disputes": sources.fetch_disputes, "forces": sources.fetch_forces,
              "equipment": sources.fetch_equipment, "military": sources.fetch_military_wb,
-             "people": sources.fetch_people}
+             "people": sources.fetch_people, "catalog": sources.fetch_catalog}
     for key, fn in steps.items():
+        if only and key not in only:
+            continue
         try:
             extra[key] = fn()
             extra.setdefault("updated", {})[key] = datetime.date.today().isoformat()

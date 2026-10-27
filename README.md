@@ -8,6 +8,9 @@ A desktop app for **Windows, macOS and Linux** with an interactive world map. It
 - **Palantir:** reported government contracts, lawsuits, controversies, protests and policy decisions, each with a source link.
 - **People and photos:** each country's flag and current head of state and head of government. Weapons are grouped by kind (fighter jets, destroyers, assault rifles…) with a plain explanation and example photo for each kind; click any item to see its own photo when online.
 - **Guide:** plain-language explanations of every topic, kind of conflict, military branch and kind of weapon.
+- **World weapons catalogue:** about 21,000 weapon and military-equipment designs from every country, each with where it was made and who uses it.
+- **Military units of the world:** about 27,000 units, from national armed forces and special forces to regiments, squadrons and militias.
+- **Israel and Palestine:** a sourced page with key numbers, the core issues and a timeline from 1917 to today.
 - **Full-page reader:** every topic opens as a large, readable page of cards. Each weapon has its own page with photo, kind, maker, year, number built, the countries that use it and (online) its Wikipedia summary.
 
 ## Download

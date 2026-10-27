@@ -37,6 +37,20 @@ def _sparql(query, tries=3):
             time.sleep(5)
 
 
+def _sparql_values(template, qids, batch=400):
+    """Runs template (with {values}) over qids in batches; a batch that times out is split in half and retried."""
+    rows, todo = [], [sorted(qids)[n:n + batch] for n in range(0, len(qids), batch)]
+    while todo:
+        part = todo.pop()
+        try:
+            rows += _sparql(template.format(values=" ".join("wd:" + q for q in part)), tries=2)
+        except OSError:
+            if len(part) <= 25:
+                raise
+            todo += [part[:len(part) // 2], part[len(part) // 2:]]
+    return rows
+
+
 def _qid(uri):
     return uri.rsplit("/", 1)[-1]
 
@@ -119,6 +133,7 @@ GW_ISO = {
     "812": "LAO", "816": "VNM", "817": "VNM", "820": "MYS", "830": "SGP", "840": "PHL", "850": "IDN",
     "860": "TLS", "900": "AUS", "910": "PNG", "920": "NZL", "940": "SLB", "950": "FJI",
 }
+PALESTINIAN = re.compile(r"\bPalestin|\bHamas\b|\bFatah\b|\bPIJ\b|\bPFLP|\bDFLP\b|\bAMB\b|Al-Aqsa Martyrs|Palestinian Islamic Jihad|\bPLO\b")
 INCOMPAT = {"1": "Territory", "2": "Government", "3": "Territory and government"}
 CTYPE = {"1": "Colonial (extrasystemic)", "2": "Between countries (interstate)", "3": "Civil war (intrastate)",
          "4": "Civil war with foreign troops (internationalized)"}
@@ -187,7 +202,11 @@ def build_conflicts(rows, wb_names, name_to_iso):
             "countries_loc": set(), "countries_a": set(), "countries_b": set(), "span": {},
         })
         y = int(r["year"])
-        for i in set(codes(r["gwno_loc"]) + codes(r["gwno_a"]) + codes(r["gwno_a_2nd"]) + codes(r["gwno_b"]) + codes(r["gwno_b_2nd"])):
+        # UCDP has no state code for Palestine: link conflicts fought over it or by Palestinian groups
+        palestine = ["PSE"] if "PSE" in name_to_iso.values() and PALESTINIAN.search(
+            " ".join((r["territory_name"], r["side_a"], r["side_b"], r["side_a_2nd"], r["side_b_2nd"]))) else []
+        c["countries_loc"].update(palestine)
+        for i in set(codes(r["gwno_loc"]) + codes(r["gwno_a"]) + codes(r["gwno_a_2nd"]) + codes(r["gwno_b"]) + codes(r["gwno_b_2nd"]) + palestine):
             s = c["span"].setdefault(i, [y, y])
             s[0], s[1] = min(s[0], y), max(s[1], y)
         c["years"].append(y)
@@ -221,32 +240,75 @@ FORCE_TYPES = {
     "Q234497": "Special forces", "Q12336613": "Special forces", "Q772547": "Armed forces",
     "Q61883": "Air force", "Q4508": "Navy", "Q37726": "Army", "Q781132": "Other branch",
 }
-FORCE_ORDER = ["Special forces", "Armed forces", "Army", "Navy", "Air force", "Other branch"]
+# every other military unit is grouped by keywords in its Wikidata type; first match wins
+UNIT_RULES = [
+    ("Paramilitary, militias & guerrillas", ["paramilitary", "militia", "guerrilla", "gendarmerie", "insurgent",
+                                             "rebel", "partisan", "national guard", "border guard"]),
+    ("Academies & training units", ["academy", "school", "training", "college", "cadet"]),
+    ("Commands & military districts", ["command", "district", "headquarters", "staff", "area"]),
+    ("Armies, corps & divisions", ["field army", "corps", "division", "army group", "front"]),
+    ("Brigades & regiments", ["brigade", "regiment"]),
+    ("Battalions, companies & batteries", ["battalion", "company", "battery", "platoon", "squad", "detachment"]),
+    ("Air squadrons, groups & wings", ["squadron", "wing", "air", "aviation"]),
+    ("Fleets, flotillas & naval units", ["fleet", "flotilla", "naval", "navy", "marine"]),
+]
+FORCE_ORDER = (["Special forces", "Army", "Navy", "Air force", "Armed forces", "Other branch"]
+               + [k for k, _ in UNIT_RULES] + ["Other units"])
+
+
+def _unit_kind(type_label, desc):
+    text = f"{type_label or ''} {desc or ''}".lower()
+    for kind, words in UNIT_RULES:
+        if any(w in text for w in words):
+            return kind
+    return "Other units"
 
 
 def fetch_forces():
-    """{iso3: [{name, desc, kind, ended}]} for armed forces, branches and special forces."""
+    """{iso3: [{name, desc, kind, type, ended, founded, img, q}]}: every military unit on Wikidata, by country."""
     best = {}
-    for t, kind in FORCE_TYPES.items():
-        rows = _sparql(f"""SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img ?founded WHERE {{ hint:Query hint:optimizer "None" .
-          ?sub wdt:P279* wd:{t} . ?u wdt:P31 ?sub . ?u wdt:P17 ?c . ?c wdt:P298 ?iso .
-          OPTIONAL {{ ?u rdfs:label ?uLabel FILTER(lang(?uLabel)="en") }}
-          OPTIONAL {{ ?u schema:description ?desc FILTER(lang(?desc)="en") }}
-          OPTIONAL {{ ?u wdt:P576 ?ended }} OPTIONAL {{ ?u wdt:P154|wdt:P94|wdt:P18 ?img }}
-          OPTIONAL {{ ?u wdt:P571 ?founded }} }}""")
+
+    def add(rows, kind_of):
         for r in rows:
-            if not r["uLabel"]:
+            if not r["uLabel"] or re.fullmatch(r"Q\d+", r["uLabel"]):
                 continue
+            kind = kind_of(r)
             key = (r["iso"], _qid(r["u"]))
             prev = best.get(key)
             founded = r["founded"][:4] if r["founded"][:4].isdigit() else ""
             if prev is None or FORCE_ORDER.index(kind) < FORCE_ORDER.index(prev["kind"]):
-                best[key] = {"name": r["uLabel"], "desc": r["desc"], "kind": kind,
+                best[key] = {"name": r["uLabel"], "desc": r["desc"], "kind": kind, "type": r.get("tl", ""),
                              "ended": r["ended"][:4] if r["ended"] else "", "q": _qid(r["u"]),
                              "img": commons_file(r["img"]), "founded": founded}
             else:
                 prev["img"] = prev["img"] or commons_file(r["img"])
                 prev["founded"] = prev.get("founded") or founded
+
+    fields = """?u wdt:P17 ?c . ?c wdt:P298 ?iso .
+          OPTIONAL {{ ?u rdfs:label ?uLabel FILTER(lang(?uLabel)="en") }}
+          OPTIONAL {{ ?u schema:description ?desc FILTER(lang(?desc)="en") }}
+          OPTIONAL {{ ?u wdt:P576 ?ended }} OPTIONAL {{ ?u wdt:P154|wdt:P94|wdt:P18 ?img }}
+          OPTIONAL {{ ?u wdt:P571 ?founded }} }}"""
+    # branches and special forces (their kind wins over the generic unit kinds)
+    for t, kind in FORCE_TYPES.items():
+        add(_sparql(f"""SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img ?founded WHERE {{ hint:Query hint:optimizer "None" .
+          ?sub wdt:P279* wd:{t} . ?u wdt:P31 ?sub . """ + fields.format()), lambda r, k=kind: k)
+    # all other military units, asked for a batch of unit types at a time
+    types = _sparql("""SELECT ?t ?tl (COUNT(?u) AS ?n) WHERE { hint:Query hint:optimizer "None" .
+      ?t wdt:P279* wd:Q176799 . ?u wdt:P31 ?t . ?u wdt:P17 ?c . ?c wdt:P298 ?iso .
+      OPTIONAL { ?t rdfs:label ?tl FILTER(lang(?tl)="en") } } GROUP BY ?t ?tl""")
+    batch, size = [], 0
+    for t in sorted(types, key=lambda r: -int(r["n"])) + [None]:
+        if t is not None and size + int(t["n"]) < 6000:
+            batch.append(t)
+            size += int(t["n"])
+            continue
+        if batch:
+            values = " ".join("wd:" + _qid(x["t"]) for x in batch)
+            add(_sparql(f"""SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img ?founded ?tl WHERE {{ hint:Query hint:optimizer "None" .
+              VALUES ?t {{ {values} }} ?u wdt:P31 ?t . OPTIONAL {{ ?t rdfs:label ?tl FILTER(lang(?tl)="en") }} """
+                        + fields.format()), lambda r: _unit_kind(r["tl"], r["desc"]))
+        batch, size = ([t], int(t["n"])) if t is not None else ([], 0)
     out = {}
     for (iso, _), v in best.items():
         out.setdefault(iso, []).append(v)
@@ -408,22 +470,20 @@ def _kind(cat, desc, type_label):
 
 def _equipment_details(qids, batch=400):
     """{qid: (makers, since year, number built)}, asked in batches so each query stays small."""
-    qids, out = sorted(qids), {}
-    for n in range(0, len(qids), batch):
-        values = " ".join("wd:" + q for q in qids[n:n + batch])
-        rows = _sparql(f"""SELECT ?e ?maker ?since ?built WHERE {{ VALUES ?e {{ {values} }}
+    out = {}
+    rows = _sparql_values("""SELECT ?e ?maker ?since ?built WHERE {{ VALUES ?e {{ {values} }}
           OPTIONAL {{ ?e wdt:P176 ?m . ?m rdfs:label ?maker FILTER(lang(?maker)="en") }}
           OPTIONAL {{ ?e wdt:P729|wdt:P606|wdt:P571 ?since }}
-          OPTIONAL {{ ?e wdt:P1092 ?built }} }}""")
-        for r in rows:
-            makers, since, built = out.get(_qid(r["e"]), ([], "", ""))
-            if r["maker"] and r["maker"] not in makers:
-                makers.append(r["maker"])
-            y = r["since"][:4] if r["since"][:4].isdigit() else ""
-            if y and (not since or y < since):
-                since = y  # earliest of entered service / first flight / created
-            built = built or (r["built"].split(".")[0] if r["built"] else "")
-            out[_qid(r["e"])] = (makers, since, built)
+          OPTIONAL {{ ?e wdt:P1092 ?built }} }}""", qids, batch)
+    for r in rows:
+        makers, since, built = out.get(_qid(r["e"]), ([], "", ""))
+        if r["maker"] and r["maker"] not in makers:
+            makers.append(r["maker"])
+        y = r["since"][:4] if r["since"][:4].isdigit() else ""
+        if y and (not since or y < since):
+            since = y  # earliest of entered service / first flight / created
+        built = built or (r["built"].split(".")[0] if r["built"] else "")
+        out[_qid(r["e"])] = (makers, since, built)
     return {q: (", ".join(m[:3]), s, b) for q, (m, s, b) in out.items()}
 
 
@@ -562,3 +622,78 @@ def download_images(files, img_dir, width=240, log=print):
                 result[name] = saved
     log(f"images: {len(result)} of {len(names)} saved")
     return result
+
+
+# Wikidata classes that hold weapon and military-equipment models (instances are designs, not single objects)
+CATALOG_TYPES = {
+    "Q15056995": "aircraft model", "Q15056993": "aircraft family", "Q559026": "ship class",
+    "Q121289722": "boat class", "Q1428357": "submarine class", "Q15142894": "weapon model",
+    "Q15142889": "weapon family", "Q100710213": "combat vehicle model", "Q100709275": "combat vehicle family",
+    "Q137188246": "military vehicle model", "Q124056273": "artillery model", "Q18487055": "missile model",
+    "Q18487018": "missile family", "Q110055303": "rocket model", "Q104758804": "torpedo model",
+    "Q22704163": "firearm model", "Q124054676": "firearm family", "Q126177905": "radar model",
+    "Q109924081": "surface-to-air missile system",
+}
+MILITARY = re.compile(r"military|army|naval|navy|air force|warship|war\b|combat|fighter|bomber|attack|"
+                      r"reconnaissance|patrol|gunboat|destroyer|frigate|corvette|cruiser|battleship|carrier|"
+                      r"submarine|minesweeper|landing|missile|torpedo|weapon|armed|trainer|interceptor|tank", re.I)
+CIVILIAN = re.compile(r"airliner|passenger|ferry|yacht|cruise ship|fishing|sailboat|racing|cargo ship|tanker ship|"
+                      r"container ship|business jet|light aircraft|sport|aerobatic|homebuilt|ultralight|glider", re.I)
+
+
+def _catalog_category(type_label, desc):
+    """Category from the description when it is specific, else from the type."""
+    d = (desc or "").lower()
+    for cat, words in EQUIP_RULES[1:]:
+        if cat and any(w in d for w in words):
+            return cat
+    return _equip_category(type_label)
+
+
+def fetch_catalog(log=print):
+    """{category: [[name, kind, desc, origin iso3, image, qid, makers, since, built, users], ...]}:
+    every weapon and military-equipment model on Wikidata, from every country."""
+    items = {}
+    for t, tl in CATALOG_TYPES.items():  # first just the names: big classes time out with more fields
+        for r in _sparql(f"""SELECT ?e ?eLabel WHERE {{ ?e wdt:P31 wd:{t} . ?e rdfs:label ?eLabel FILTER(lang(?eLabel)="en") }}"""):
+            items.setdefault(_qid(r["e"]), {"name": r["eLabel"], "type": tl, "desc": "", "origin": "", "img": ""})
+    # then the details, a batch at a time
+    for r in _sparql_values("""SELECT ?e ?desc ?origin ?img WHERE {{ VALUES ?e {{ {values} }}
+          OPTIONAL {{ ?e schema:description ?desc FILTER(lang(?desc)="en") }}
+          OPTIONAL {{ ?e wdt:P495 ?o . ?o wdt:P298 ?origin }}
+          OPTIONAL {{ ?e wdt:P18 ?img }} }}""", set(items)):
+        it = items[_qid(r["e"])]
+        it["desc"] = it["desc"] or r["desc"]
+        it["origin"] = it["origin"] or r["origin"]
+        it["img"] = it["img"] or commons_file(r["img"])
+    users = _operators(set(items))
+    keep = {}
+    for q, it in items.items():
+        if re.fullmatch(r"Q\d+", it["name"]):
+            continue
+        cat = _catalog_category(it["type"], it["desc"])
+        if not cat or cat in ("Nuclear tests", "Bases", "Incidents: crashes, shootdowns & sinkings"):
+            continue
+        # aircraft and ship designs include civilian ones: keep only military designs
+        if cat in ("Aircraft & drones", "Warships & boats") and q not in users and (
+                CIVILIAN.search(it["desc"] or "") or not MILITARY.search(f"{it['desc']} {it['type']}")):
+            continue
+        keep[q] = (cat, it)
+    details = _equipment_details(set(keep))
+    out = {}
+    for q, (cat, it) in keep.items():
+        out.setdefault(cat, []).append([it["name"], _kind(cat, it["desc"], it["type"]), it["desc"], it["origin"],
+                                        it["img"], q, *details.get(q, ("", "", "")), sorted(users.get(q, []))])
+    for v in out.values():
+        v.sort(key=lambda x: (-len(x[9]), x[0].lower()))
+    log(f"catalog: {sum(len(v) for v in out.values())} models")
+    return out
+
+
+def _operators(qids, batch=400):
+    """{qid: {iso3}}: countries that operate each item, directly or through their forces."""
+    out = {}
+    for r in _sparql_values("""SELECT DISTINCT ?e ?iso WHERE {{ VALUES ?e {{ {values} }} ?e wdt:P137 ?op .
+          {{ ?op wdt:P298 ?iso }} UNION {{ ?op wdt:P17 ?c . ?c wdt:P298 ?iso }} }}""", qids, batch):
+        out.setdefault(_qid(r["e"]), set()).add(r["iso"])
+    return out

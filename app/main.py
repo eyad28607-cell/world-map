@@ -16,9 +16,10 @@ import webview
 
 import build_data
 
-APP_VERSION = "1.4.0"
+APP_VERSION = "1.5.0"
 REPO = "eyad28607-cell/world-map"
 PALANTIR_URL = f"https://raw.githubusercontent.com/{REPO}/main/app/assets/palantir.json"
+TOPICS_URL = f"https://raw.githubusercontent.com/{REPO}/main/app/assets/topics.js"
 UPDATE_EVERY_DAYS = 365
 
 BASE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
@@ -73,6 +74,14 @@ def update_if_due(window, st):
         except (OSError, ValueError):
             with open(os.path.join(WWW, "palantir.json"), encoding="utf-8") as f:
                 pal = json.load(f)
+        try:  # hand-written topic pages (e.g. Israel and Palestine), as edited on GitHub
+            with urllib.request.urlopen(TOPICS_URL, timeout=30) as r:
+                topics = r.read()
+            if topics.startswith(b"// Hand-written topic pages"):
+                with open(os.path.join(WWW, "topics.js"), "wb") as f:
+                    f.write(topics)
+        except OSError:
+            pass
         build_data.write(rows, pal, WWW)
         build_data.refresh_extra(countries, WWW, log=lambda m: None)
     except (OSError, ValueError, KeyError, IndexError):
@@ -82,13 +91,48 @@ def update_if_due(window, st):
     window.evaluate_js("location.reload()")
 
 
+# Checks run by the self-test: (name, JavaScript that returns true when that part works)
+SELF_TEST = [
+    ("map draws countries", "document.querySelectorAll('#map path.choroplethlocation').length > 150"),
+    ("guide opens", "document.getElementById('bg').click(); !reader.hidden && document.querySelectorAll('#rbody .gitem').length > 50"),
+    ("country page", "closeReader(); country(byIso['FRA']); openCountry('FRA'); RB.innerText.includes('France')"),
+    ("weapons page", "openEquip('USA','Aircraft & drones'); document.querySelectorAll('#rbody .card').length > 20"),
+    ("weapon detail", "document.querySelector('#rbody .card').click(); !!document.querySelector('#rbody .detail')"),
+    ("world catalogue", "openCatalog(); document.querySelectorAll('#rbody .tile').length > 5"),
+    ("world units", "openWorldUnits('Special forces'); document.querySelectorAll('#rbody .card').length > 20"),
+    ("conflicts page", "openConflicts('UKR'); document.querySelectorAll('#rbody .ccard').length > 0"),
+    ("Israel-Palestine page", "openTopic('israel-palestine'); document.querySelectorAll('#rbody .tl').length > 10"),
+    ("photos load offline", "[...document.querySelectorAll('#rbody img')].some(i => i.complete && i.naturalWidth > 0)"),
+]
+
+
+def self_test(window, out_path):
+    """Opens every main page in the real app window, writes the results to out_path and closes the app."""
+    import time
+    time.sleep(8)
+    results = {}
+    for name, js in SELF_TEST:
+        *steps, check = js.split(";")  # run the steps, then return the final check
+        try:
+            results[name] = bool(window.evaluate_js(
+                f"(() => {{ try {{ {';'.join(steps)}; return !!({check}); }} catch (e) {{ return false; }} }})()"))
+        except Exception:
+            results[name] = False
+        time.sleep(1)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=1)
+    window.destroy()
+
+
 def main():
     os.makedirs(HOME, exist_ok=True)
     st = prepare()
     window = webview.create_window("World Map", os.path.join(WWW, "index.html"),
                                    width=1280, height=820, min_size=(700, 500))
-    webview.start(lambda: threading.Thread(target=update_if_due, args=(window, st), daemon=True).start(),
-                  icon=os.path.join(BASE, "icon.png" if sys.platform != "win32" else "icon.ico"))
+    test_out = os.environ.get("WORLDMAP_SELFTEST")
+    task = (lambda: threading.Thread(target=self_test, args=(window, test_out), daemon=True).start()) if test_out else \
+        (lambda: threading.Thread(target=update_if_due, args=(window, st), daemon=True).start())
+    webview.start(task, icon=os.path.join(BASE, "icon.png" if sys.platform != "win32" else "icon.ico"))
 
 
 if __name__ == "__main__":

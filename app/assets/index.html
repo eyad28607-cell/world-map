@@ -5,6 +5,7 @@
 <script src="data.js"></script>
 <script src="extra.js"></script>
 <script src="guide.js"></script>
+<script src="topics.js"></script>
 <style>
 :root{--bg:#fafaf8;--fg:#1d1d1b;--muted:#6b6b66;--card:#fff;--line:#e3e2dc;--accent:#2a6fdb;--warm:#c2410c;--soft:#f3f2ee;
  --t-contract:#2a6fdb;--t-legal:#7c3aed;--t-controversy:#c2410c;--t-protest:#be123c;--t-policy:#0f766e;--t-issue:#a16207}
@@ -59,6 +60,12 @@ svg text{fill:var(--muted);font-size:10px}
 .ptile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--line)}
 .ptile:hover{border-color:var(--accent)}
 .ptile span{font-size:20px}.ptile b{font-size:14px;line-height:1.3}.ptile small{color:var(--accent)}
+.bigbtn.alt{background:var(--soft);color:var(--fg);border-color:var(--line)}
+.timeline{border-left:3px solid var(--line);margin-left:8px}
+.tl{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:10px 0 10px 18px;position:relative}
+.tl::before{content:'';position:absolute;left:-8px;top:18px;width:13px;height:13px;border-radius:50%;background:var(--accent)}
+.tldate{font-weight:700;color:var(--accent)}.tl b{font-size:17px}.tl p{margin:4px 0}
+@media (max-width:800px){.tl{grid-template-columns:1fr;gap:2px}}
 .bigbtn{display:block;width:100%;margin:10px 0;padding:10px;font-weight:600;background:var(--accent);border-color:var(--accent);color:#fff;border-radius:10px}
 .tag{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;color:#fff;background:var(--c);margin-right:6px}
 /* full-screen reader */
@@ -122,6 +129,7 @@ svg text{fill:var(--muted);font-size:10px}
 <div class="wrap"><div id="map"></div><aside id="panel"></aside></div>
 <div id="reader" hidden><div class="rbar"><button id="rback" hidden>← Back</button><h1 id="rtitle"></h1><button id="rclose">✕ Close</button></div><div id="rbody"></div></div>
 <script>
+D.forEach(d=>{if(d.iso3=='PSE')d.name='Palestine';}); // World Bank calls it "West Bank and Gaza"
 const byIso=Object.fromEntries(D.map(d=>[d.iso3,d]));
 const byName=Object.fromEntries(D.map(d=>[d.name.toLowerCase(),d]));
 const PC=PAL.countries, LV=PAL.levels;
@@ -229,6 +237,7 @@ function country(d){
  const h=d.history.map(r=>[r[0],+(100-r[1]).toFixed(1)]),first=h[0],change=+(d.offline-first[1]).toFixed(1),pc=PC[d.iso3];
  panel.innerHTML=`<a class="back" onclick="world()">← World overview</a>
  <button class="bigbtn" onclick="openCountry('${d.iso3}')">📖 Open full page for ${esc(d.name)}</button>
+ ${Object.entries(TOPICS).filter(([,t])=>t.countries.includes(d.iso3)).map(([id,t])=>`<button class="bigbtn alt" onclick="openTopic('${id}')">🕊️ ${esc(t.title)}: the full story</button>`).join('')}
  <div class="titlebar">${(()=>{const f=localImg(((X.people||{})[d.iso3]||{}).flag);return f?`<img class="flag" src="${f}" alt="">`:''})()}<div><h2>${esc(d.name)}</h2><p class="sub">${esc(d.region)}</p></div></div>
  ${leadersBlock(d.iso3)}
  <h3>Offline population</h3>
@@ -264,6 +273,8 @@ function world(){
  </div>
  <h3>Highest % offline</h3><ol>${top.map(d=>li(d)+`${esc(d.name)}: ${d.offline}%</li>`).join('')}</ol>
  <h3>Most people offline</h3><ol>${most.map(d=>li(d)+`${esc(d.name)}: ${fmt(d.offline_people)}</li>`).join('')}</ol>
+ <h3>The world's militaries</h3><div class="ptiles">${tile('World weapons catalogue',Object.values(X.catalog||{}).reduce((n,l)=>n+l.length,0),'openCatalog()','🌍')}${tile('Armies, special forces & units',Object.values(FORCES).reduce((n,l)=>n+l.length,0),'openMilitaryWorld()','🎖️')}</div>
+ <h3>Special topics</h3><div class="ptiles">${Object.entries(TOPICS).map(([id,t])=>tile(t.title,t.timeline.length,`openTopic('${id}')`,'🕊️')).join('')}</div>
  <h3>Armed conflicts</h3><div class="ptiles">${tile('All conflicts since 1946 ('+CONF.filter(c=>c.active).length+' active)',CONF.length,'openConflicts()','⚔️')}${tile('Guide: what everything means',X.equipment_order.length+3,'openGuide()','📘')}</div>
  <h3>Biggest military spenders</h3><ol>${Object.keys(MIL).filter(i=>byIso[i]&&MIL[i].mil_usd).sort((a,b)=>MIL[b].mil_usd[0]-MIL[a].mil_usd[0]).slice(0,10).map(i=>li(byIso[i])+`${esc(nm(i))}: ${money(MIL[i].mil_usd[0])}</li>`).join('')}</ol>
  <h3>Palantir countries</h3><ol>${[...PI].sort((a,b)=>PC[b].level-PC[a].level||PC[b].items.length-PC[a].items.length).map(i=>li(byIso[i])+`${esc(byIso[i].name)}: ${PC[i].items.length} items <span class="sub">(${esc(LV[PC[i].level])})</span></li>`).join('')}</ol>

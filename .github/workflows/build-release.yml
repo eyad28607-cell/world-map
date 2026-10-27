@@ -55,11 +55,24 @@ jobs:
           python-version: "3.12"
       - name: Install Linux libraries
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libegl1 libxkbcommon-x11-0 libxcb-cursor0 libnss3 libxcomposite1 libxdamage1 libxrandr2 libxtst6
+        run: sudo apt-get update && sudo apt-get install -y xvfb libegl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libnss3 libxcomposite1 libxdamage1 libxrandr2 libxtst6 libasound2
       - name: Install tools
         run: pip install ${{ matrix.deps }}
       - name: Build app
         run: python app/build.py
+      - name: Self-test the built app (opens every main page in the real window)
+        shell: bash
+        env:
+          WORLDMAP_SELFTEST: ${{ runner.temp }}/selftest.json
+          QTWEBENGINE_CHROMIUM_FLAGS: --no-sandbox
+        run: |
+          case "$RUNNER_OS" in
+            Windows) timeout 300 ./dist/WorldMap.exe ;;
+            macOS)   timeout 300 ./dist/WorldMap.app/Contents/MacOS/WorldMap ;;
+            Linux)   timeout 300 xvfb-run -a ./dist/WorldMap/WorldMap ;;
+          esac || true
+          cat "$WORLDMAP_SELFTEST"
+          python -c "import json,sys; r=json.load(open(sys.argv[1])); bad=[k for k,v in r.items() if not v]; print('FAILED:', bad) if bad else print('All checks passed'); sys.exit(1 if bad else 0)" "$WORLDMAP_SELFTEST"
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}

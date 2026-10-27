@@ -34,24 +34,29 @@ const fact = (label, value) => value ? `<div class="fact"><span>${esc(label)}</s
 // ---------- equipment ----------
 const usersOf = {}; // qid -> countries operating it
 Object.entries(EQUIP).forEach(([iso, cats]) => Object.values(cats).forEach(l => l.forEach(e => (usersOf[e[5]] = usersOf[e[5]] || []).push(iso))));
+const CAT = X.catalog || {}; // world catalogue: every weapon model, wherever it was made
+Object.values(CAT).forEach(l => l.forEach(e => (e[9] || []).forEach(i => (usersOf[e[5]] = usersOf[e[5]] || []).push(i))));
 
 function equipCard(e, cat) {
   return `<button class="card" onclick="openItem('${e[5]}')">${pic(e[4], ICON[cat])}
     <div class="ctext"><b>${esc(e[0])}</b>${e[2] ? `<p>${esc(e[2])}</p>` : ''}
-    <div class="chips">${e[7] ? `<span>Since ${esc(e[7])}</span>` : ''}${e[3] ? `<span>Made in ${esc(nm(e[3]))}</span>` : ''}${e[8] ? `<span>${Number(e[8]).toLocaleString()} built</span>` : ''}</div></div></button>`;
+    <div class="chips">${e[7] ? `<span>Since ${esc(e[7])}</span>` : ''}${e[3] ? `<span>Made in ${esc(nm(e[3]))}</span>` : ''}${e[8] ? `<span>${Number(e[8]).toLocaleString()} built</span>` : ''}${nUsers(e[5]) ? `<span>Used by ${nUsers(e[5])} countries</span>` : ''}</div></div></button>`;
 }
+const nUsers = q => new Set(usersOf[q] || []).size;
 function findItem(qid) {
+  for (const [cat, l] of Object.entries(CAT)) { const e = l.find(x => x[5] == qid); if (e) return [e, cat]; }
   for (const cats of Object.values(EQUIP)) for (const [cat, l] of Object.entries(cats)) { const e = l.find(x => x[5] == qid); if (e) return [e, cat]; }
   return [];
 }
-function openEquip(iso, cat) {
-  const items = EQUIP[iso][cat], order = (X.kind_order || {})[cat] || [], groups = {};
+function openEquip(iso, cat) { openWeapons(`${nm(iso)}: ${cat}`, EQUIP[iso][cat], cat); }
+function openWeapons(title, items, cat) {
+  const order = (X.kind_order || {})[cat] || [], groups = {};
   items.forEach(e => (groups[e[1]] = groups[e[1]] || []).push(e));
   const kinds = Object.keys(groups).sort((a, b) => ((order.indexOf(a) + 1) || 99) - ((order.indexOf(b) + 1) || 99));
   // best-known first: used by more countries, then pictured, then more details
-  const score = e => (usersOf[e[5]] || []).length * 10 + (e[4] ? 5 : 0) + (e[2] ? 1 : 0) + (e[6] ? 1 : 0);
+  const score = e => nUsers(e[5]) * 10 + (e[4] ? 5 : 0) + (e[2] ? 1 : 0) + (e[6] ? 1 : 0);
   kinds.forEach(k => groups[k].sort((a, b) => score(b) - score(a) || a[0].localeCompare(b[0])));
-  openPage({ title: `${nm(iso)}: ${cat}`, html: () => `
+  openPage({ title, html: () => `
     <p class="lead">${esc(INFO[cat] || '')}</p>
     <p class="muted">${items.length.toLocaleString()} items, grouped by kind. Click any card for its photo and full details.</p>
     <input class="rfind" placeholder="Search these ${items.length.toLocaleString()} items…" oninput="filterCards(this.value)">
@@ -62,6 +67,29 @@ function openEquip(iso, cat) {
         <div class="grid" data-kind="${i}"></div></section>`; }).join('')}`,
     after: () => kinds.forEach((k, i) => fillGrid(document.querySelector(`.grid[data-kind="${i}"]`), groups[k], e => equipCard(e, cat)))
   });
+}
+function openCatalog() {
+  const cats = X.equipment_order.filter(c => CAT[c]), total = cats.reduce((n, c) => n + CAT[c].length, 0);
+  openPage({ title: 'World weapons catalogue', html: () => `
+    <p class="lead">Every weapon and military-equipment design recorded on Wikidata, from every country: ${total.toLocaleString()} models. Each one shows where it was made and which countries use it.</p>
+    <div class="tiles">${cats.map(c => `<button class="tile" onclick="openWeapons('World: ${esc(c)}', CAT['${c}'], '${c}')"><span class="ticon">${ICON[c] || ''}</span><b>${esc(c)}</b><small>${CAT[c].length.toLocaleString()} models ›</small></button>`).join('')}</div>
+    <p class="muted">Wikidata is edited by volunteers, so famous designs are covered best. Civilian aircraft and ships are left out unless a military uses them.</p>` });
+}
+// every unit of one kind, from every country
+function openWorldUnits(kind) {
+  const list = Object.entries(FORCES).flatMap(([iso, l]) => l.filter(f => f.kind == kind).map(f => ({ ...f, iso }))).filter(f => byIso[f.iso])
+    .sort((a, b) => nm(a.iso).localeCompare(nm(b.iso)) || a.name.localeCompare(b.name));
+  openPage({ title: `World: ${kind}`, html: () => `
+    <p class="lead">${esc(INFO[kind] || '')}</p><p class="muted">${list.length.toLocaleString()} units in ${new Set(list.map(f => f.iso)).size} countries.</p>
+    <input class="rfind" placeholder="Search by name or country…" oninput="filterCards(this.value)">
+    <section><div class="grid" id="wgrid"></div></section>`,
+    after: () => fillGrid(document.getElementById('wgrid'), list, unitCard) });
+}
+function openMilitaryWorld() {
+  const count = k => Object.values(FORCES).reduce((n, l) => n + l.filter(f => f.kind == k).length, 0);
+  openPage({ title: 'Armies, special forces & military units of the world', html: () => `
+    <p class="lead">Every military unit recorded on Wikidata, from national armed forces down to battalions: ${Object.values(FORCES).reduce((n, l) => n + l.length, 0).toLocaleString()} units.</p>
+    <div class="tiles">${X.force_order.filter(count).map(k => `<button class="tile" onclick="openWorldUnits('${k}')"><span class="ticon">${k == 'Special forces' ? '🎯' : '🎖️'}</span><b>${esc(k == 'Other branch' ? 'Other branches' : k)}</b><small>${count(k).toLocaleString()} ›</small></button>`).join('')}</div>` });
 }
 // draws cards in chunks so big lists stay fast
 function fillGrid(el, list, card, start = 0) {
@@ -117,8 +145,11 @@ function openForces(iso, kind) {
     <p class="lead">${esc(INFO[kind] || '')}</p>
     <input class="rfind" placeholder="Search these ${list.length} units…" oninput="filterCards(this.value)">
     <section><div class="grid" id="fgrid"></div></section>`,
-    after: () => fillGrid(document.getElementById('fgrid'), list, f => `<button class="card unit" onclick="openUnit('${iso}','${f.q}')">${pic(f.img, '🎖️')}
-      <div class="ctext"><b>${esc(f.name)}</b>${f.desc ? `<p>${esc(f.desc)}</p>` : ''}<div class="chips">${f.founded ? `<span>Founded ${esc(f.founded)}</span>` : ''}${f.ended ? `<span>Disbanded ${esc(f.ended)}</span>` : ''}</div></div></button>`) });
+    after: () => fillGrid(document.getElementById('fgrid'), list.map(f => ({ ...f, iso })), unitCard) });
+}
+function unitCard(f) {
+  return `<button class="card unit" onclick="openUnit('${f.iso}','${f.q}')">${pic(f.img, f.kind == 'Special forces' ? '🎯' : '🎖️')}
+    <div class="ctext"><b>${esc(f.name)}</b>${f.desc ? `<p>${esc(f.desc)}</p>` : ''}<div class="chips"><span>${esc(nm(f.iso))}</span>${f.type ? `<span>${esc(f.type)}</span>` : ''}${f.founded ? `<span>Founded ${esc(f.founded)}</span>` : ''}${f.ended ? `<span>Disbanded ${esc(f.ended)}</span>` : ''}</div></div></button>`;
 }
 function openUnit(iso, q) {
   const f = (FORCES[iso] || []).find(x => x.q == q); if (!f) return;
@@ -155,7 +186,7 @@ function openGuide() {
     <div class="jump"><a onclick="document.getElementById('g-topics').scrollIntoView({behavior:'smooth'})">Topics</a><a onclick="document.getElementById('g-conf').scrollIntoView({behavior:'smooth'})">Conflicts</a><a onclick="document.getElementById('g-forces').scrollIntoView({behavior:'smooth'})">Military forces</a>${X.equipment_order.map((c, i) => `<a onclick="document.getElementById('g-c${i}').scrollIntoView({behavior:'smooth'})">${ICON[c] || ''} ${esc(c)}</a>`).join('')}</div>
     <h2 id="g-topics">Topics</h2><div class="ggrid">${GUIDE_TOPICS.map(([t, d]) => `<div class="gitem"><div><b>${esc(t)}</b><p>${esc(d)}</p></div></div>`).join('')}</div>
     <h2 id="g-conf">Kinds of conflict</h2>${cards(Object.values(CTYPES))}
-    <h2 id="g-forces">Military forces</h2>${cards(['Armed forces', 'Army', 'Navy', 'Air force', 'Special forces', 'Other branch'])}
+    <h2 id="g-forces">Military forces</h2>${cards(X.force_order)}
     ${X.equipment_order.map((c, i) => `<h2 id="g-c${i}">${ICON[c] || ''} ${esc(c)}</h2><p>${esc(INFO[c] || '')}</p>${cards((X.kind_order || {})[c] || [])}`).join('')}
     ${note()}` });
 }
@@ -185,3 +216,20 @@ function militaryLead(iso) {
   if (m.mil_personnel) parts.push(`has about ${fmt(m.mil_personnel[0])} people in its armed forces (${m.mil_personnel[1]})`);
   return parts.length ? `<p class="lead">${esc(nm(iso))} ${parts.join(', ')}.</p>` : '';
 }
+
+// ---------- hand-written topics (topics.js) ----------
+function openTopic(id) {
+  const t = TOPICS[id]; if (!t) return;
+  const conf = [...new Set(t.countries.flatMap(i => confOf[i] || []))];
+  openPage({ title: t.title, html: () => `
+    <div class="chead">${t.countries.map(i => { const f = localImg(((X.people || {})[i] || {}).flag); return f ? `<img class="bigflag" src="${f}" alt="" title="${esc(nm(i))}">` : ''; }).join('')}<div><h2>${esc(t.title)}</h2><p class="muted">Updated ${esc(t.updated)}</p></div></div>
+    <p class="lead">${esc(t.summary)}</p>
+    <div class="leaders">${t.countries.flatMap(i => leadersOf(i).map(l => `<div class="leader">${pic(l.img, '👤')}<div><span>${esc(nm(i))} · ${esc(l.role)}</span><b>${esc(l.name)}</b><p>${esc(l.desc || '')}</p></div></div>`)).join('')}</div>
+    <h2>Key numbers</h2><div class="cgrid">${t.stats.map(s => `<div class="ccard"><h3 style="font-size:30px">${esc(s.value)}</h3><b>${esc(s.label)}</b><p class="muted">${esc(s.note)} <a href="${esc(s.source)}" target="_blank" rel="noopener">Source</a></p></div>`).join('')}</div>
+    <p class="muted">${esc(t.sources_note)}</p>
+    <h2>The core issues</h2><div class="ggrid">${t.issues.map(x => `<div class="gitem"><div><b>${esc(x.title)}</b><p>${esc(x.text)}</p></div></div>`).join('')}</div>
+    <h2>Timeline</h2><div class="timeline">${t.timeline.map(e => `<div class="tl"><div class="tldate">${esc(e.date)}</div><div><b>${esc(e.title)}</b><p>${esc(e.text)} <a href="${esc(e.source)}" target="_blank" rel="noopener">Source</a></p></div></div>`).join('')}</div>
+    <h2>More</h2><div class="tiles">${t.countries.map(i => `<button class="tile" onclick="openCountry('${i}')"><span class="ticon">📖</span><b>${esc(nm(i))}: full country page</b><small>Open ›</small></button>`).join('')}
+      ${conf.length ? `<button class="tile" onclick="openConflicts('PSE')"><span class="ticon">⚔️</span><b>Armed conflicts involving Palestine</b><small>${(confOf.PSE || []).length} ›</small></button><button class="tile" onclick="openConflicts('ISR')"><span class="ticon">⚔️</span><b>Armed conflicts involving Israel</b><small>${(confOf.ISR || []).length} ›</small></button>` : ''}</div>` });
+}
+const topicsFor = iso => Object.entries(TOPICS).filter(([, t]) => t.countries.includes(iso));
