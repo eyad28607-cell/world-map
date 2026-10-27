@@ -23,7 +23,7 @@ window.INFO = {
   "Incidents: crashes, shootdowns & sinkings": "Accidents and attacks involving military aircraft and ships.",
 
   // ----- kinds -----
-  "Fighter jets": "Fast jets built to win control of the sky by shooting down other aircraft; most can also attack ground targets.",
+  "Fighter aircraft": "Fast planes built to win control of the sky by shooting down other aircraft; most can also attack ground targets.",
   "Bombers": "Large aircraft that carry bombs or missiles a long way to strike targets on the ground.",
   "Attack aircraft": "Planes built to hit targets on the ground, often supporting soldiers in battle.",
   "Helicopters": "Aircraft with rotors that can hover and land almost anywhere: used for transport, attack, rescue and hunting submarines.",

@@ -24,8 +24,9 @@ def _get(url, timeout=90):
 
 
 def _sparql(query, tries=3):
-    url = WDQS + "?" + urllib.parse.urlencode({"query": query})
-    req = urllib.request.Request(url, headers={**UA, "Accept": "text/csv"})
+    body = urllib.parse.urlencode({"query": query}).encode()  # POST: long VALUES lists don't fit in a URL
+    req = urllib.request.Request(WDQS, data=body, headers={**UA, "Accept": "text/csv",
+                                                           "Content-Type": "application/x-www-form-urlencoded"})
     for n in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=90) as r:
@@ -227,23 +228,25 @@ def fetch_forces():
     """{iso3: [{name, desc, kind, ended}]} for armed forces, branches and special forces."""
     best = {}
     for t, kind in FORCE_TYPES.items():
-        rows = _sparql(f"""SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended WHERE {{ hint:Query hint:optimizer "None" .
+        rows = _sparql(f"""SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img ?founded WHERE {{ hint:Query hint:optimizer "None" .
           ?sub wdt:P279* wd:{t} . ?u wdt:P31 ?sub . ?u wdt:P17 ?c . ?c wdt:P298 ?iso .
           OPTIONAL {{ ?u rdfs:label ?uLabel FILTER(lang(?uLabel)="en") }}
           OPTIONAL {{ ?u schema:description ?desc FILTER(lang(?desc)="en") }}
-          OPTIONAL {{ ?u wdt:P576 ?ended }} OPTIONAL {{ ?u wdt:P154|wdt:P94|wdt:P18 ?img }} }}""".replace(
-            "SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended", "SELECT DISTINCT ?u ?uLabel ?desc ?iso ?ended ?img"))
+          OPTIONAL {{ ?u wdt:P576 ?ended }} OPTIONAL {{ ?u wdt:P154|wdt:P94|wdt:P18 ?img }}
+          OPTIONAL {{ ?u wdt:P571 ?founded }} }}""")
         for r in rows:
             if not r["uLabel"]:
                 continue
             key = (r["iso"], _qid(r["u"]))
             prev = best.get(key)
+            founded = r["founded"][:4] if r["founded"][:4].isdigit() else ""
             if prev is None or FORCE_ORDER.index(kind) < FORCE_ORDER.index(prev["kind"]):
                 best[key] = {"name": r["uLabel"], "desc": r["desc"], "kind": kind,
                              "ended": r["ended"][:4] if r["ended"] else "", "q": _qid(r["u"]),
-                             "img": commons_file(r["img"])}
-            elif not prev["img"] and r["img"]:
-                prev["img"] = commons_file(r["img"])
+                             "img": commons_file(r["img"]), "founded": founded}
+            else:
+                prev["img"] = prev["img"] or commons_file(r["img"])
+                prev["founded"] = prev.get("founded") or founded
     out = {}
     for (iso, _), v in best.items():
         out.setdefault(iso, []).append(v)
@@ -294,7 +297,7 @@ KIND_RULES = {
     "Aircraft & drones": [
         ("Drones (unmanned aircraft)", ["unmanned", "drone", "uav", "ucav"]),
         ("Helicopters", ["helicopter", "rotorcraft", "tiltrotor"]),
-        ("Fighter jets", ["fighter", "interceptor", "multirole combat"]),
+        ("Fighter aircraft", ["fighter", "interceptor", "multirole combat"]),
         ("Bombers", ["bomber"]),
         ("Attack aircraft", ["attack aircraft", "ground-attack", "ground attack", "close air support", "strike aircraft"]),
         ("Spy, patrol & early-warning aircraft", ["reconnaissance", "surveillance", "early warning", "awacs",
@@ -403,8 +406,30 @@ def _kind(cat, desc, type_label):
     return "Other " + cat.split(":")[0].split(" & ")[0].split(",")[0].lower()
 
 
+def _equipment_details(qids, batch=400):
+    """{qid: (makers, since year, number built)}, asked in batches so each query stays small."""
+    qids, out = sorted(qids), {}
+    for n in range(0, len(qids), batch):
+        values = " ".join("wd:" + q for q in qids[n:n + batch])
+        rows = _sparql(f"""SELECT ?e ?maker ?since ?built WHERE {{ VALUES ?e {{ {values} }}
+          OPTIONAL {{ ?e wdt:P176 ?m . ?m rdfs:label ?maker FILTER(lang(?maker)="en") }}
+          OPTIONAL {{ ?e wdt:P729|wdt:P606|wdt:P571 ?since }}
+          OPTIONAL {{ ?e wdt:P1092 ?built }} }}""")
+        for r in rows:
+            makers, since, built = out.get(_qid(r["e"]), ([], "", ""))
+            if r["maker"] and r["maker"] not in makers:
+                makers.append(r["maker"])
+            y = r["since"][:4] if r["since"][:4].isdigit() else ""
+            if y and (not since or y < since):
+                since = y  # earliest of entered service / first flight / created
+            built = built or (r["built"].split(".")[0] if r["built"] else "")
+            out[_qid(r["e"])] = (makers, since, built)
+    return {q: (", ".join(m[:3]), s, b) for q, (m, s, b) in out.items()}
+
+
 def fetch_equipment():
-    """{iso3: {category: [[name, kind, description, origin iso3], ...]}} for equipment a country or its forces operate."""
+    """{iso3: {category: [[name, kind, description, origin iso3, image, qid, makers, since year, number built], ...]}}
+    for equipment a country or its forces operate."""
     fields = """OPTIONAL { ?e wdt:P31 ?t . ?t rdfs:label ?tLabel FILTER(lang(?tLabel)="en") }
       OPTIONAL { ?e schema:description ?desc FILTER(lang(?desc)="en") }
       OPTIONAL { ?e wdt:P495 ?o . ?o wdt:P298 ?origin }
@@ -427,8 +452,9 @@ def fetch_equipment():
         it["desc"] = it["desc"] or r["desc"]
         it["origin"] = it["origin"] or r["origin"]
         it["img"] = it["img"] or commons_file(r["img"])
+    details = _equipment_details({q for _, q in items})
     out = {}
-    for (iso, _), it in items.items():
+    for (iso, qid), it in items.items():
         cat, typ = None, ""
         for t in it["types"]:
             cat = _equip_category(t)
@@ -438,7 +464,8 @@ def fetch_equipment():
         if not cat:
             continue
         out.setdefault(iso, {}).setdefault(cat, []).append(
-            [it["name"], _kind(cat, it["desc"], typ), it["desc"], it["origin"] if it["origin"] != iso else "", it["img"]])
+            [it["name"], _kind(cat, it["desc"], typ), it["desc"], it["origin"] if it["origin"] != iso else "", it["img"],
+             qid, *details.get(qid, ("", "", ""))])
     for cats in out.values():
         for v in cats.values():
             v.sort(key=lambda x: (x[1], x[0].lower()))

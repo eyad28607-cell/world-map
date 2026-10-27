@@ -45,18 +45,7 @@ ol{padding-left:22px;margin:0}ol li{cursor:pointer;padding:2px 0}ol li:hover{col
 a.back{color:var(--accent);cursor:pointer;font-size:13px}
 svg text{fill:var(--muted);font-size:10px}
 .note{font-size:11px;color:var(--muted);margin-top:20px}
-details{border:1px solid var(--line);border-radius:8px;margin:6px 0;background:var(--card)}
-summary{cursor:pointer;padding:6px 10px;font-weight:600}
-summary span{color:var(--muted);font-weight:400}
-details .body{padding:0 10px 8px;max-height:420px;overflow:auto}
-details .row{padding:3px 0;border-top:1px solid var(--line);font-size:13px}
-details .row small{color:var(--muted)}
-.conf{border-left:3px solid var(--c,var(--line));padding:6px 0 6px 10px;margin:6px 0;font-size:13px}
-.conf b{display:block;font-size:14px}
-.conf .meta{color:var(--muted);font-size:12px}
 .live{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;background:#be123c;color:#fff;margin-right:6px}
-.ffind{width:100%;margin:4px 0 6px}
-.explain{font-size:13px;color:var(--muted);margin:2px 0 8px}
 .titlebar{display:flex;align-items:center;gap:10px}
 .flag{height:28px;border-radius:3px;border:1px solid var(--line)}
 .people{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
@@ -64,18 +53,66 @@ details .row small{color:var(--muted)}
 .person img,.person .ph{width:52px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
 .person b{display:block;font-size:13px;line-height:1.3}
 .person span{font-size:11px;color:var(--muted)}
-.kind{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;padding-top:8px;border-top:2px solid var(--line)}
-.kind img{width:96px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
-.kind b{display:block}
-.kind p{margin:2px 0 0;font-size:12px;color:var(--muted)}
-.row.pic{cursor:pointer}
-.row.pic::after{content:" 📷";font-size:11px}
-.row .shot{display:block;max-width:100%;max-height:220px;border-radius:6px;margin:6px 0}
-.row .off{display:block;font-size:12px;color:var(--muted);margin:4px 0}
-.gcard{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
-.gcard img{width:110px;height:72px;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
-.gcard b{display:block}.gcard p{margin:2px 0 0;font-size:13px;color:var(--muted)}
 @media (max-width:800px){.wrap{grid-template-columns:1fr;grid-template-rows:55vh auto}aside{border-left:0;border-top:1px solid var(--line)}input{width:100%}}
+.explain{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.ptiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.ptile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--line)}
+.ptile:hover{border-color:var(--accent)}
+.ptile span{font-size:20px}.ptile b{font-size:14px;line-height:1.3}.ptile small{color:var(--accent)}
+.bigbtn{display:block;width:100%;margin:10px 0;padding:10px;font-weight:600;background:var(--accent);border-color:var(--accent);color:#fff;border-radius:10px}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;color:#fff;background:var(--c);margin-right:6px}
+/* full-screen reader */
+#reader{position:fixed;inset:0;background:var(--bg);overflow:auto;z-index:10;font-size:16px;line-height:1.6}
+#reader[hidden]{display:none}
+.rbar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.rbar h1{flex:1;font-size:20px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbar button{font-size:15px;padding:8px 14px}
+#rbody{max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+#rbody h2{font-size:24px;margin:32px 0 8px}
+#rbody h3{font-size:18px;margin:22px 0 6px}
+.lead{font-size:18px}.muted{color:var(--muted)}
+.rfind{width:100%;font-size:16px;padding:10px 14px;margin:12px 0}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.jump a{cursor:pointer;padding:6px 12px;border-radius:99px;background:var(--soft);border:1px solid var(--line);color:var(--fg);text-decoration:none;font-size:14px}
+.jump a small{color:var(--muted)}
+.kindsec{margin-top:28px}
+.khead{display:flex;gap:16px;align-items:center;padding:14px;border-radius:12px;background:var(--soft);margin-bottom:12px}
+.khead img{width:180px;height:120px;object-fit:cover;border-radius:8px;flex:none}
+.khead h2{margin:0 !important}.khead small{color:var(--muted);font-weight:400}.khead p{margin:4px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{display:flex;flex-direction:column;text-align:left;padding:0;overflow:hidden;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:15px;line-height:1.5}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.card img,.card .noimg{width:100%;height:170px;object-fit:cover;background:var(--soft)}
+.card.unit img{object-fit:contain;padding:10px}
+.noimg{display:flex;align-items:center;justify-content:center;font-size:48px;background:var(--soft);color:var(--muted)}
+.ctext{padding:12px 14px}.ctext b{font-size:17px;display:block}.ctext p{margin:4px 0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chips span{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--soft)}
+.more{grid-column:1/-1;padding:12px;font-size:15px}
+.detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.bigpic img,.bigpic .noimg{width:100%;max-height:560px;object-fit:cover;border-radius:12px;min-height:240px}
+.bigpic.contain img{object-fit:contain;background:var(--soft);padding:20px}
+.dtext h2{margin-top:0 !important;font-size:30px !important}
+.kindtag{color:var(--accent);font-weight:600;margin:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:14px 0}
+.fact{background:var(--soft);border-radius:10px;padding:10px 12px}.fact span{display:block;font-size:12px;color:var(--muted)}.fact b{font-size:16px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.ccard{padding:16px;border-radius:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--line)}
+.ccard.on{border-left-color:#be123c}.ccard h3{margin:4px 0 8px !important}
+.vs{margin:6px 0}.vs span{color:var(--muted);font-size:13px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.gitem{display:flex;gap:14px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.gitem img,.gitem .noimg{width:130px;height:90px;object-fit:cover;border-radius:8px;flex:none;font-size:32px}
+.gitem b{font-size:17px}.gitem p{margin:4px 0}
+.chead{display:flex;gap:16px;align-items:center}.bigflag{height:56px;border-radius:4px;border:1px solid var(--line)}.chead h2{margin:0 !important}
+.leaders{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:16px}
+.leader{display:flex;gap:14px;align-items:center;padding:12px;border-radius:12px;background:var(--soft)}
+.leader img,.leader .noimg{width:90px;height:110px;object-fit:cover;border-radius:8px;flex:none}
+.leader span{font-size:13px;color:var(--muted)}.leader b{display:block;font-size:18px}.leader p{margin:2px 0;font-size:14px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:16px;border-radius:12px;background:var(--card);border:1px solid var(--line);text-align:left}
+.tile:hover{border-color:var(--accent)}.ticon{font-size:28px}.tile b{font-size:16px}.tile small{color:var(--accent);font-size:14px}
+.pitem{padding:12px 0;border-top:1px solid var(--line)}.pitem b{display:block;font-size:17px}.pitem p{margin:4px 0}
+@media (max-width:800px){.detail{grid-template-columns:1fr}.khead{flex-direction:column;align-items:flex-start}.khead img{width:100%;height:180px}.cgrid,.ggrid{grid-template-columns:1fr}}
 </style></head><body>
 <header>
  <h1>World Map</h1>
@@ -83,6 +120,7 @@ details .row small{color:var(--muted)}
  <input id="q" list="names" placeholder="Search a country…"><datalist id="names"></datalist>
 </header>
 <div class="wrap"><div id="map"></div><aside id="panel"></aside></div>
+<div id="reader" hidden><div class="rbar"><button id="rback" hidden>← Back</button><h1 id="rtitle"></h1><button id="rclose">✕ Close</button></div><div id="rbody"></div></div>
 <script>
 const byIso=Object.fromEntries(D.map(d=>[d.iso3,d]));
 const byName=Object.fromEntries(D.map(d=>[d.name.toLowerCase(),d]));
@@ -130,80 +168,36 @@ function show(w){
  Plotly.react('map',[VIEWS[w]],layout,{responsive:true,displaylogo:false,topojsonURL:'./'});
  [b1,b2,b3,b4].forEach((b,k)=>b.classList.toggle('on',w==k+1));
 }
-// lists that can be thousands long are only drawn when their section is opened
-const lazy={};let lazyN=0;
-function section(title,count,render,open){const id='lz'+(lazyN++);lazy[id]=render;
- return `<details id="${id}" ${open?'open':''} ontoggle="fill(this)"><summary>${esc(title)} <span>(${count.toLocaleString()})</span></summary><div class="body"></div></details>`;}
-function fill(el){const b=el.querySelector('.body');if(el.open&&!b.dataset.done){b.innerHTML=lazy[el.id]();b.dataset.done=1;}}
-function findIn(inp){const t=inp.value.toLowerCase();inp.parentNode.querySelectorAll('.row').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(t)?'':'none');}
-function confHtml(c,iso){
- const other=c.involved.filter(i=>i!=iso).map(nm),live=isActive(c,iso),sp=iso&&c.span&&c.span[iso];
- const own=sp&&(sp[0]!=c.first||sp[1]!=c.last)?` · ${esc(nm(iso))} involved ${sp[0]}–${sp[1]==X.ucdp_last_year&&c.active?'present':sp[1]}`:'';
- return `<div class="conf" style="--c:${live?'#be123c':'var(--line)'}">${live?'<span class="live">ACTIVE</span>':''}<b>${esc(c.location)}${c.territory?': '+esc(c.territory):''}</b>
- ${esc(sides(c.side_a))} <i>vs</i> ${esc(sides(c.side_b))}
- <div class="meta">${c.first}–${c.active?'present':c.last}${own} · ${c.years_active} year(s) of fighting${c.war_years?`, ${c.war_years} at war level (1,000+ deaths/yr)`:''} · <span title="${esc(INFO[c.type]||'')}">${esc(c.type)}</span> · over ${esc(c.incompatibility.toLowerCase())}${other.length?` · other countries involved: ${esc(sides(other))}`:''}</div></div>`;
-}
 function conflictBlock(iso){
  const cs=confOf[iso]||[],ds=DISP[iso]||[];
  if(!cs.length&&!ds.length)return `<p class="none">No armed conflicts (25+ deaths a year) since 1946 and no disputed territories in the data.</p>`;
  const act=cs.filter(c=>isActive(c,iso)),past=cs.filter(c=>!isActive(c,iso));
- return `<p class="explain">Every armed conflict with 25+ battle deaths in a year that ${esc(nm(iso))} fought in or that took place on its land. Hover a conflict type for what it means, or open the Guide.</p><div class="stats"><div class="stat"><b>${act.length}</b><span>active conflicts (${X.ucdp_last_year})</span></div><div class="stat"><b>${cs.length}</b><span>conflicts since 1946</span></div></div>`
- +(act.length?section('Active conflicts',act.length,()=>act.map(c=>confHtml(c,iso)).join(''),true):'')
- +(past.length?section('Past conflicts',past.length,()=>past.map(c=>confHtml(c,iso)).join('')):'')
- +(ds.length?section('Disputed territories',ds.length,()=>ds.map(d=>`<div class="row"><b>${esc(d.name)}</b> <small>${esc(d.desc||'')}</small><br><small>Claimed by: ${esc(d.claimants.map(nm).join(', '))}</small></div>`).join('')):'');
+ return `<p class="explain">Every armed conflict with 25+ battle deaths in a year that ${esc(nm(iso))} fought in or that took place on its land. </p><div class="stats"><div class="stat"><b>${act.length}</b><span>active conflicts (${X.ucdp_last_year})</span></div><div class="stat"><b>${cs.length}</b><span>conflicts since 1946</span></div></div>`
+ +`<div class="ptiles">${tile('Read all conflicts & disputes',cs.length+ds.length,`openConflicts('${iso}')`,'⚔️')}</div>`;
 }
 // ----- photos: saved ones work offline, the rest load from Wikimedia Commons when online -----
 const IMG=X.img||{};
 const localImg=f=>f&&IMG[f]?'img/'+IMG[f]:'';
 const webImg=(f,w)=>'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(f)+'?width='+(w||360);
-const anyImg=f=>localImg(f)||(f?webImg(f,240):'');
-const explain=k=>INFO[k]?`<p class="explain">${esc(INFO[k])}</p>`:'';
-function photo(row){ // clicking an item shows its photo
- const f=row.dataset.img;if(!f)return;
- const s=row.querySelector('.shot,.off');if(s){s.remove();return;}
- const im=document.createElement('img');im.className='shot';im.alt='';im.src=localImg(f)||webImg(f);
- im.onerror=()=>{const p=document.createElement('span');p.className='off';p.textContent='Photo needs an internet connection.';im.replaceWith(p);};
- row.appendChild(im);
-}
-const picRow=(f,inner)=>`<div class="row${f?' pic':''}" ${f?`data-img="${esc(f)}" onclick="photo(this)"`:''}>${inner}</div>`;
-function kindHead(kind,n){
- const ex=(X.kind_example||{})[kind],src=ex&&(localImg(ex.img)||'');
- return `<div class="kind">${src?`<img src="${src}" alt="" title="Example: ${esc(ex.name)}">`:''}<div><b>${esc(kind)} (${n})</b><p>${esc(INFO[kind]||'')}${src?` <i>Photo: ${esc(ex.name)}.</i>`:''}</p></div></div>`;
-}
-function equipList(cat,items){
- const order=(X.kind_order||{})[cat]||[],groups={};
- items.forEach(e=>(groups[e[1]]=groups[e[1]]||[]).push(e));
- const ks=Object.keys(groups).sort((a,b)=>((order.indexOf(a)+1)||99)-((order.indexOf(b)+1)||99));
- return explain(cat)+`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+ks.map(k=>kindHead(k,groups[k].length)+groups[k].map(e=>
-  picRow(e[4],`<b>${esc(e[0])}</b>${e[3]?` <small>· made in ${esc(nm(e[3]))}</small>`:''}${e[2]?`<br><small>${esc(e[2])}</small>`:''}`)).join('')).join('');
-}
+const tile=(label,n,js,icon)=>`<button class="ptile" onclick="${js}"><span>${icon||''}</span><b>${esc(label)}</b><small>${n.toLocaleString()} ›</small></button>`;
 function militaryBlock(iso){
  const m=MIL[iso]||{},fs=FORCES[iso]||[],eq=EQUIP[iso]||{};
  const st=(k,f,l)=>m[k]?`<div class="stat"><b>${f(m[k][0])}</b><span>${l} (${m[k][1]})</span></div>`:'';
  let h=`<div class="stats">${st('mil_usd',money,'military spending')}${st('mil_pct_gdp',v=>v+'%','of GDP')}${st('mil_personnel',fmt,'armed forces personnel')}${st('arms_imports',money,'arms imports*')}${st('arms_exports',money,'arms exports*')}</div>`;
  const kinds=X.force_order.filter(k=>fs.some(f=>f.kind==k));
- if(kinds.length)h+=`<p class="explain">Click a name with 📷 to see its badge or photo.</p>`;
- kinds.forEach(k=>{const l=fs.filter(f=>f.kind==k);h+=section(k=='Other branch'?'Other branches & units':k,l.length,()=>explain(k)+`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+l.map(f=>picRow(f.img,`<b>${esc(f.name)}</b>${f.ended?` <small>(disbanded ${esc(f.ended)})</small>`:''}${f.desc?`<br><small>${esc(f.desc)}</small>`:''}`)).join(''),k=='Special forces')});
+ if(kinds.length)h+=`<p class="explain">Click to open a full page with photos and details.</p><div class="ptiles">${kinds.map(k=>tile(k=='Other branch'?'Other branches & units':k,fs.filter(f=>f.kind==k).length,`openForces('${iso}','${k}')`,k=='Special forces'?'🎯':'🎖️')).join('')}</div>`;
  const cats=X.equipment_order.filter(c=>eq[c]);
- if(cats.length)h+=`<h3>Weapons, equipment & tech (${eqN(iso).toLocaleString()})</h3><p class="explain">Grouped by kind, with an explanation and an example photo for each kind. Click a name with 📷 to see its own photo.</p>`;
- cats.forEach(c=>{h+=section(c,eq[c].length,()=>equipList(c,eq[c]))});
+ if(cats.length)h+=`<h3>Weapons, equipment & tech (${eqN(iso).toLocaleString()})</h3><div class="ptiles">${cats.map(c=>tile(c,eq[c].length,`openEquip('${iso}','${c}')`,ICON[c])).join('')}</div>`;
  if(!fs.length&&!cats.length&&!m.mil_usd)h+=`<p class="none">No military data for this country.</p>`;
  return h;
 }
-function leadersBlock(iso){
- const p=(X.people||{})[iso];if(!p||!p.leaders.length)return '';
- return `<div class="people">${p.leaders.map(l=>{const src=localImg(l.img);return `<div class="person">${src?`<img src="${src}" alt="">`:'<div class="ph"></div>'}<div><span>${esc(l.role)}</span><b>${esc(l.name)}</b><span>${esc(l.desc||'')}</span></div></div>`}).join('')}</div>`;
+function leadersOf(iso){ // one card per person, e.g. a president who is head of state and of government
+ const out=[];((X.people||{})[iso]||{leaders:[]}).leaders.forEach(l=>{const s=out.find(x=>x.name==l.name);if(s)s.role='Head of state and government';else out.push({...l});});
+ return out;
 }
-function guide(){
- const cards=(list)=>list.map(k=>{const ex=(X.kind_example||{})[k],src=ex&&localImg(ex.img);
-  return `<div class="gcard">${src?`<img src="${src}" alt="" title="${esc(ex.name)}">`:''}<div><b>${esc(k)}</b><p>${esc(INFO[k]||'')}${src?` <i>Photo: ${esc(ex.name)}.</i>`:''}</p></div></div>`}).join('');
- panel.innerHTML=`<a class="back" onclick="world()">← World overview</a><h2>Guide</h2><p class="sub">What every topic, kind of weapon and military term in this app means.</p>
- <h3>Topics</h3>${GUIDE_TOPICS.map(([t,d])=>`<div class="gcard"><div><b>${esc(t)}</b><p>${esc(d)}</p></div></div>`).join('')}
- <h3>Kinds of conflict</h3>${cards(Object.values(CTYPES))}
- <h3>Military forces</h3>${cards(['Armed forces','Army','Navy','Air force','Special forces','Other branch'])}
- ${X.equipment_order.map(c=>section(c,((X.kind_order||{})[c]||[]).length,()=>explain(c)+cards((X.kind_order||{})[c]||[]))).join('')}
- ${note()}`;
- panel.scrollTop=0;q.value='';
+function leadersBlock(iso){
+ const ls=leadersOf(iso);if(!ls.length)return '';
+ return `<div class="people">${ls.map(l=>{const src=localImg(l.img);return `<div class="person">${src?`<img src="${src}" alt="">`:'<div class="ph"></div>'}<div><span>${esc(l.role)}</span><b>${esc(l.name)}</b><span>${esc(l.desc||'')}</span></div></div>`}).join('')}</div>`;
 }
 const CTYPES={1:'Between countries (interstate)',2:'Civil war (intrastate)',3:'Civil war with foreign troops (internationalized)',4:'Colonial (extrasystemic)'};
 function trend(h){
@@ -234,6 +228,7 @@ Conflicts: UCDP/PRIO Armed Conflict Dataset v${esc(X.ucdp_version)} (Uppsala Uni
 function country(d){
  const h=d.history.map(r=>[r[0],+(100-r[1]).toFixed(1)]),first=h[0],change=+(d.offline-first[1]).toFixed(1),pc=PC[d.iso3];
  panel.innerHTML=`<a class="back" onclick="world()">← World overview</a>
+ <button class="bigbtn" onclick="openCountry('${d.iso3}')">📖 Open full page for ${esc(d.name)}</button>
  <div class="titlebar">${(()=>{const f=localImg(((X.people||{})[d.iso3]||{}).flag);return f?`<img class="flag" src="${f}" alt="">`:''})()}<div><h2>${esc(d.name)}</h2><p class="sub">${esc(d.region)}</p></div></div>
  ${leadersBlock(d.iso3)}
  <h3>Offline population</h3>
@@ -269,8 +264,7 @@ function world(){
  </div>
  <h3>Highest % offline</h3><ol>${top.map(d=>li(d)+`${esc(d.name)}: ${d.offline}%</li>`).join('')}</ol>
  <h3>Most people offline</h3><ol>${most.map(d=>li(d)+`${esc(d.name)}: ${fmt(d.offline_people)}</li>`).join('')}</ol>
- <h3>Active armed conflicts (${X.ucdp_last_year})</h3>${section('All active conflicts',CONF.filter(c=>c.active).length,()=>CONF.filter(c=>c.active).map(c=>confHtml(c,'')).join(''))}
- ${section('All conflicts since 1946',CONF.length,()=>`<input class="ffind" placeholder="Filter…" oninput="findIn(this)">`+CONF.map(c=>`<div class="row"><b>${esc(c.location)}${c.territory?': '+esc(c.territory):''}</b> <small>${c.first}–${c.active?'present':c.last}</small><br><small>${esc(c.side_a.join(', '))} vs ${esc(c.side_b.join(', '))}</small></div>`).join(''))}
+ <h3>Armed conflicts</h3><div class="ptiles">${tile('All conflicts since 1946 ('+CONF.filter(c=>c.active).length+' active)',CONF.length,'openConflicts()','⚔️')}${tile('Guide: what everything means',X.equipment_order.length+3,'openGuide()','📘')}</div>
  <h3>Biggest military spenders</h3><ol>${Object.keys(MIL).filter(i=>byIso[i]&&MIL[i].mil_usd).sort((a,b)=>MIL[b].mil_usd[0]-MIL[a].mil_usd[0]).slice(0,10).map(i=>li(byIso[i])+`${esc(nm(i))}: ${money(MIL[i].mil_usd[0])}</li>`).join('')}</ol>
  <h3>Palantir countries</h3><ol>${[...PI].sort((a,b)=>PC[b].level-PC[a].level||PC[b].items.length-PC[a].items.length).map(i=>li(byIso[i])+`${esc(byIso[i].name)}: ${PC[i].items.length} items <span class="sub">(${esc(LV[PC[i].level])})</span></li>`).join('')}</ol>
  <h3>Palantir: international and Europe-wide</h3>${items([...PAL.summary,...PAL.international],'wf')}
@@ -279,7 +273,8 @@ function world(){
 }
 names.innerHTML=D.map(d=>`<option value="${esc(d.name)}">`).join('');
 q.addEventListener('change',()=>{const d=byName[q.value.trim().toLowerCase()];if(d)country(d)});
-b1.onclick=()=>show(1);b2.onclick=()=>show(2);b3.onclick=()=>show(3);b4.onclick=()=>show(4);bg.onclick=guide;
+b1.onclick=()=>show(1);b2.onclick=()=>show(2);b3.onclick=()=>show(3);b4.onclick=()=>show(4);bg.onclick=()=>openGuide();
 show(1);world();
 document.getElementById('map').on('plotly_click',e=>{const d=byIso[e.points[0].location];if(d)country(d)});
-</script></body></html>
+</script>
+<script src="reader.js"></script></body></html>
