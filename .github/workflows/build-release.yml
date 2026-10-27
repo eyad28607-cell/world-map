@@ -68,7 +68,7 @@ jobs:
         run: |
           case "$RUNNER_OS" in
             Windows) timeout 300 ./dist/WorldMap.exe ;;
-            macOS)   timeout 300 ./dist/WorldMap.app/Contents/MacOS/WorldMap ;;
+            macOS)   perl -e 'alarm 300; exec @ARGV' ./dist/WorldMap.app/Contents/MacOS/WorldMap ;;  # macOS has no `timeout`
             Linux)   timeout 300 xvfb-run -a ./dist/WorldMap/WorldMap ;;
           esac || true
           cat "$WORLDMAP_SELFTEST"
