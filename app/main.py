@@ -16,14 +16,19 @@ import webview
 
 import build_data
 
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 REPO = "eyad28607-cell/world-map"
 PALANTIR_URL = f"https://raw.githubusercontent.com/{REPO}/main/app/assets/palantir.json"
 UPDATE_EVERY_DAYS = 365
 
 BASE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
 BUNDLED = os.path.join(BASE, "assets")
-HOME = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), "WorldMap")
+if sys.platform == "win32":
+    HOME = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), "WorldMap")
+elif sys.platform == "darwin":
+    HOME = os.path.expanduser("~/Library/Application Support/WorldMap")
+else:
+    HOME = os.path.join(os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share")), "WorldMap")
 WWW = os.path.join(HOME, "www")
 STATE = os.path.join(HOME, "state.json")
 
@@ -58,7 +63,8 @@ def update_if_due(window, st):
     if (datetime.date.today() - last).days < UPDATE_EVERY_DAYS:
         return
     try:
-        rows = build_data.build_rows(*build_data.fetch_worldbank())
+        countries, net, pop = build_data.fetch_worldbank()
+        rows = build_data.build_rows(countries, net, pop)
         try:
             with urllib.request.urlopen(PALANTIR_URL, timeout=30) as r:
                 pal = json.loads(r.read().decode("utf-8"))
@@ -68,6 +74,7 @@ def update_if_due(window, st):
             with open(os.path.join(WWW, "palantir.json"), encoding="utf-8") as f:
                 pal = json.load(f)
         build_data.write(rows, pal, WWW)
+        build_data.refresh_extra(countries, WWW, log=lambda m: None)
     except (OSError, ValueError, KeyError, IndexError):
         return  # offline or source changed; keep current data and try next launch
     st["last_update"] = datetime.date.today().isoformat()
@@ -78,10 +85,10 @@ def update_if_due(window, st):
 def main():
     os.makedirs(HOME, exist_ok=True)
     st = prepare()
-    window = webview.create_window("World Map: Offline & Palantir", os.path.join(WWW, "index.html"),
+    window = webview.create_window("World Map", os.path.join(WWW, "index.html"),
                                    width=1280, height=820, min_size=(700, 500))
     webview.start(lambda: threading.Thread(target=update_if_due, args=(window, st), daemon=True).start(),
-                  icon=os.path.join(BASE, "icon.ico"))
+                  icon=os.path.join(BASE, "icon.png" if sys.platform != "win32" else "icon.ico"))
 
 
 if __name__ == "__main__":

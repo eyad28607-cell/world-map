@@ -8,6 +8,8 @@ import json
 import os
 import urllib.request
 
+import sources
+
 WB = "https://api.worldbank.org/v2/"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -83,8 +85,45 @@ def write(rows, pal, out_dir, csv_path=None):
     return meta
 
 
+def refresh_extra(countries, out_dir, log=print):
+    """Downloads conflicts and military data into extra.js. A source that fails keeps its previous data."""
+    path = os.path.join(out_dir, "extra.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            extra = json.load(f)
+    except (OSError, ValueError):
+        extra = {}
+    real = {c["id"]: c["name"] for c in countries if c["region"]["id"] != "NA"}
+    name_to_iso = {v: k for k, v in real.items()}
+
+    def conflicts():
+        rows, ver = sources.fetch_ucdp()
+        conf, last = sources.build_conflicts(rows, list(real.values()), name_to_iso)
+        extra["ucdp_version"], extra["ucdp_last_year"] = ver, last
+        return conf
+
+    steps = {"conflicts": conflicts, "disputes": sources.fetch_disputes, "forces": sources.fetch_forces,
+             "equipment": sources.fetch_equipment, "military": sources.fetch_military_wb}
+    for key, fn in steps.items():
+        try:
+            extra[key] = fn()
+            extra.setdefault("updated", {})[key] = datetime.date.today().isoformat()
+            log(f"{key}: ok ({len(extra[key])})")
+        except Exception as e:  # keep going; old data for this source stays
+            log(f"{key}: failed, keeping previous data ({e})")
+    extra["equipment_order"] = sources.EQUIP_ORDER
+    extra["force_order"] = sources.FORCE_ORDER
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(extra, f, ensure_ascii=False)
+    with open(os.path.join(out_dir, "extra.js"), "w", encoding="utf-8") as f:
+        f.write("window.X=" + json.dumps(extra, ensure_ascii=False) + ";\n")
+    return extra
+
+
 if __name__ == "__main__":
     assets = os.path.join(HERE, "assets")
     pal = json.load(open(os.path.join(assets, "palantir.json"), encoding="utf-8"))
-    rows = build_rows(*fetch_worldbank())
+    countries, net, pop = fetch_worldbank()
+    rows = build_rows(countries, net, pop)
     print(write(rows, pal, assets, os.path.join(HERE, "..", "world-data.csv")), len(rows), "countries")
+    refresh_extra(countries, assets)
