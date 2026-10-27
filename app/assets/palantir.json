@@ -1,0 +1,120 @@
+{
+  "updated": "2026-10-27",
+  "levels": {"4": "Extensive use", "3": "Active contracts", "2": "Limited, ending or letter of intent", "1": "Rejected / issues only"},
+  "summary": [
+    {"type": "Issue", "title": "European governments have spent at least €1.4 billion on Palantir", "detail": "Follow the Money investigation. The real figure is higher because some governments, including the Netherlands and Sweden, would not say. The UK accounts for about €1.17 billion.", "date": "2026-10", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"},
+    {"type": "Protest", "title": "Global week of action against Palantir", "detail": "Protests on several continents over Palantir's work with the Israeli military and US immigration enforcement.", "date": "2026-09", "source": "https://afsc.org/palantir-global-week-action"}
+  ],
+  "international": [
+    {"type": "Contract", "title": "NATO: Maven Smart System", "detail": "Allied Command Operations (SHAPE, Mons, Belgium) acquired Palantir's AI battlefield system.", "date": "2025-03", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+    {"type": "Contract", "title": "Europol: Gotham via Capgemini", "detail": "EU police agency analysis platform, about €7.5 million.", "date": "2016", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+    {"type": "Policy", "title": "MEPs question the European Commission about Palantir", "detail": "Members of the European Parliament raised questions about Palantir's role in Europe.", "date": "2026-04", "source": "https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/"}
+  ],
+  "countries": {
+    "USA": {"level": 4, "items": [
+      {"type": "Contract", "title": "US Army enterprise agreement", "detail": "Up to $10 billion over 10 years, consolidating Army software contracts.", "date": "2025-07", "status": "Active", "source": "https://app.govly.com/public/signals/177815"},
+      {"type": "Contract", "title": "Maven Smart System expansion", "detail": "Reported $618 million expansion of the Army's AI targeting and battlefield-data platform.", "date": "2026-08", "status": "Reported", "source": "https://app.govly.com/public/signals/177815"},
+      {"type": "Contract", "title": "Department of Homeland Security blanket purchase agreement", "detail": "Five-year agreement worth up to $1 billion for AI and data analytics, paid through task orders.", "date": "2026-02", "status": "Reported", "source": "https://x.com/PalantirOg/status/2024824231221953012"},
+      {"type": "Contract", "title": "USDA food-supply deal", "detail": "$300 million deal with the Department of Agriculture to manage farmland and supply-chain risk.", "date": "2026-04", "status": "Active", "source": "https://www.cnbc.com/2026/04/22/palantir-inks-300-million-deal-with-usda-to-safeguard-food-supply.html"},
+      {"type": "Contract", "title": "ICE: ImmigrationOS", "detail": "About $30 million platform to track and prioritise people for deportation.", "date": "2025", "status": "Active", "source": "https://www.404media.co/this-is-palantirs-justification-for-building-ices-master-database/"},
+      {"type": "Contract", "title": "Treasury common API layer", "detail": "Developer platform, workflow automation and data analytics for the Treasury.", "date": "2025-09", "status": "Active", "source": "https://www.sec.gov/Archives/edgar/data/0001321655/000132165526000041/pltr-20260630.htm"},
+      {"type": "Controversy", "title": "IRS 'mega API' and tax data", "detail": "Senators Wyden and Markey and Rep. Ocasio-Cortez demanded answers over Palantir helping DOGE build a searchable database linking tax data with other records, saying it likely breaks the Privacy Act and tax privacy laws.", "date": "2025-06", "source": "https://www.markey.senate.gov/news/press-releases/markey-joins-wyden-ocasio-cortez-to-demand-answers-from-palantir-about-plans-to-build-irs-mega-database-of-american-citizens"},
+      {"type": "Controversy", "title": "ICE 'ELITE' tool uses Medicaid data", "detail": "Reported tool that pulls Medicaid and other government data to build dossiers and arrest leads. Criticised by the EFF and KFF.", "date": "2026-01", "source": "https://fortune.com/2026/01/26/ice-allegedly-uses-palantir-tool-tracking-medicaid-data"},
+      {"type": "Controversy", "title": "IRS contracts under scrutiny", "detail": "Tax Notes reports scrutiny of Palantir's IRS contracts amid the tax-data controversy.", "date": "2026-02", "source": "https://www.taxnotes.com/featured-news/palantir-contracts-under-scrutiny-amid-irs-tax-data-controversy/2026/02/18/7tzns"},
+      {"type": "Legal", "title": "Palantir wins lawsuit against the US Army", "detail": "Court of Federal Claims ruled the Army broke a 1994 procurement law by not considering commercial software. Palantir later won a major Army contract.", "date": "2016-10", "source": "https://thehill.com/policy/technology/303630-palantir-wins-lawsuit-over-us-army-data-system/"},
+      {"type": "Legal", "title": "Sued by San Antonio defence contractor", "detail": "Guardian Premier Solutions alleges fraud and breach of contract over a $709,000 'partnership program'.", "date": "2025", "status": "Pending", "source": "https://finance.yahoo.com/news/ai-software-giant-palantir-sued-130000558.html"},
+      {"type": "Legal", "title": "Shareholder lawsuits dismissed", "detail": "Securities and derivative suits against Palantir executives were dismissed in April 2025; one was appealed to the Tenth Circuit.", "date": "2025-04", "source": "https://www.sec.gov/Archives/edgar/data/1321655/000132165525000106/pltr-20250630.htm"},
+      {"type": "Protest", "title": "Presbyterian Church (USA) divests", "detail": "Voted unanimously to sell about $2.5 million of Palantir stock.", "date": "2026-06", "source": "https://afsc.org/purge-palantir"},
+      {"type": "Protest", "title": "University of San Francisco divests", "detail": "Divested from defence companies including Palantir after student protests.", "date": "2025", "source": "https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/"}
+    ]},
+    "GBR": {"level": 4, "items": [
+      {"type": "Contract", "title": "Ministry of Defence enterprise agreement", "detail": "Since 2020; enterprise agreement Dec 2022; new deal of about £240 million in Dec 2025. UK deals total about £992 million.", "date": "2025-12", "status": "Active", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"},
+      {"type": "Contract", "title": "NHS England Federated Data Platform", "detail": "£330 million contract envelope to link hospital data.", "date": "2023-11", "status": "Active", "source": "https://www.foxglove.org.uk/?p=10469"},
+      {"type": "Contract", "title": "Financial Conduct Authority", "detail": "£30,000 a month to analyse sensitive FCA data.", "date": "2026-03", "status": "Pilot", "source": "https://novaramedia.com/2026/03/24/palantir-has-been-awarded-yet-another-uk-government-contract/"},
+      {"type": "Contract", "title": "Home Office firearms licensing", "detail": "About £9 million replacement system.", "date": "2026", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "AWE Nuclear Security Technologies", "detail": "About £15 million via Crown Commercial Service.", "date": "2026", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Leicestershire Police / EMSOU", "detail": "About £800,000.", "date": "2025", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Cabinet Office 'Border Flow'", "detail": "Brexit border data platform.", "date": "2020", "status": "Unclear", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Legal", "title": "Foxglove legal challenge to NHS deal", "detail": "Foxglove, Doctors' Association UK, National Pensioners Convention and Just Treatment argued the data platform had no legal basis.", "date": "2023", "source": "https://www.computing.co.uk/news/4152103/legal-challenge-launched-nhs-palantir-deal"},
+      {"type": "Legal", "title": "Good Law Project sues over redacted NHS contract", "detail": "417 of 586 contract pages were blanked out.", "date": "2024-02", "source": "https://www.theregister.com/2024/02/20/legal_campaigners_challenge_government_decision/"},
+      {"type": "Controversy", "title": "MPs urge ending NHS contract", "detail": "Cross-party Health and Social Care Committee urged ministers to consider ending the contract; NHS England's chief questioned its benefit assessments (8 July 2026).", "date": "2026-07", "source": "https://www.computing.co.uk/news/2026/government/mps-urge-government-cancel-palantir-nhs-contract"},
+      {"type": "Legal", "title": "Met Police deal blocked, Palantir sues, then settles", "detail": "London's Mayor's Office blocked a ~£50 million Met Police AI deal in May 2026. Palantir sued in June; both sides settled on 14 Oct 2026 and Palantir was let back into bidding.", "date": "2026-10", "status": "Settled", "source": "https://www.itv.com/news/london/2026-10-14/tech-giant-palantir-and-london-mayors-office-settle-legal-dispute"},
+      {"type": "Policy", "title": "Commons debate on MoD Palantir contracts", "detail": "Ministry of Defence Palantir contracts debated in Parliament.", "date": "2026-02-10", "source": "https://hansard.parliament.uk/Commons/2026-02-10/debates/FECED111-4FA8-4343-BFAF-18D6C13808D0/MinistryOfDefencePalantirContracts"},
+      {"type": "Protest", "title": "Council pension investments criticised", "detail": "A Labour council's Palantir investments rose 1,200% during the Gaza war, Novara Media reports.", "date": "2026-10", "source": "https://novaramedia.com/2026/10/07/labour-councils-palantir-investments-increased-1200-during-gaza-genocide/"}
+    ]},
+    "UKR": {"level": 3, "items": [
+      {"type": "Contract", "title": "Ministry of Digital Transformation", "detail": "Foundry/AIP; started June 2022, MoU May 2023.", "date": "2022-06", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Ministry of Defence and Armed Forces", "detail": "Battlefield data and targeting support.", "date": "2023-02", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Brave1 Dataroom", "detail": "Defence-tech data room on Foundry.", "date": "2026-01", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "DEU": {"level": 3, "items": [
+      {"type": "Contract", "title": "Hesse police 'HessenDATA'", "detail": "Gotham crime analysis.", "date": "2017", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "North Rhine-Westphalia police 'DAR'", "detail": "About €14 million.", "date": "2020", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Bavaria police 'VeRA'", "detail": "Went live 25 Dec 2024.", "date": "2024-12", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Baden-Württemberg police", "detail": "Five-year deal of about €25 million signed before there was a legal basis; Greens and CDU later agreed to change the police law to allow it.", "date": "2025", "status": "Pending law change", "source": "https://posteo.de/en/news/germany-police-in-baden-württemberg-will-be-able-to-use-palantir"},
+      {"type": "Legal", "title": "Constitutional Court ruling", "detail": "Use of Palantir-based automated analysis in Hesse and Hamburg ruled unconstitutional after a case by the GFF civil-rights group.", "date": "2023-02", "source": "https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/"},
+      {"type": "Policy", "title": "Federal government reviews nationwide use", "detail": "Interior Minister Dobrindt examined using Palantir for federal police; SPD and Greens opposed. No final decision reported.", "date": "2025", "status": "Under review", "source": "https://www.yahoo.com/news/articles/germany-weighs-nationwide-palantirs-controversial-161014140.html"},
+      {"type": "Policy", "title": "Bundeswehr procurement not awarded to Palantir", "detail": "Armed forces chose not to award a procurement to Palantir.", "date": "2026-04", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "FRA": {"level": 2, "items": [
+      {"type": "Contract", "title": "DGSI domestic intelligence", "detail": "Gotham since 2016 for counter-terrorism; renewed Dec 2025.", "date": "2016", "status": "Being replaced", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Policy", "title": "Switch to French supplier ChapsVision", "detail": "DGSI to replace Palantir, citing sovereignty concerns.", "date": "2026-06", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "DNK": {"level": 3, "items": [
+      {"type": "Contract", "title": "National police 'POL-INTEL'", "detail": "Gotham; Danish police have paid about €28 million.", "date": "2016", "status": "Active", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"},
+      {"type": "Contract", "title": "Security and Intelligence Service 'PET-INTEL'", "detail": "Gotham.", "date": "2017", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "Defence contract", "detail": "Denmark is one of eight European countries with Palantir defence deals.", "date": "", "status": "Active", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"},
+      {"type": "Policy", "title": "Plans to seek local alternatives", "detail": "Denmark announced it will look for alternatives to Palantir.", "date": "2026", "source": "https://euronews.com/next/2026/06/05/why-are-european-governments-reevaluating-their-agreements-with-us-defence-tech-contractor"}
+    ]},
+    "NLD": {"level": 2, "items": [
+      {"type": "Contract", "title": "Ministry of Defence", "detail": "In use since 2010. Government would not disclose spending.", "date": "2010", "status": "Active", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Contract", "title": "National Police", "detail": "Deployment since 2012; current status unclear.", "date": "2012", "status": "Unclear", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Policy", "title": "European alternative within two years", "detail": "Government said a full alternative to Palantir must be ready within two years.", "date": "2026-06", "source": "https://euronews.com/next/2026/06/05/why-are-european-governments-reevaluating-their-agreements-with-us-defence-tech-contractor"},
+      {"type": "Protest", "title": "Pension fund ABP divests", "detail": "The Dutch civil-service pension fund sold its Palantir stake.", "date": "2026-04", "source": "https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/"}
+    ]},
+    "ESP": {"level": 2, "items": [
+      {"type": "Contract", "title": "Armed Forces Intelligence Center (CIFAS)", "detail": "About €16.5 million; reportedly expires Nov 2026.", "date": "2023", "status": "Ending", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"},
+      {"type": "Policy", "title": "State companies told not to sign or renew", "detail": "Reported instruction to state-controlled firms (including Telefónica, Indra, Navantia) not to sign new or renewed Palantir contracts.", "date": "2026-07", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "ITA": {"level": 2, "items": [
+      {"type": "Contract", "title": "Ministry of Defence", "detail": "About €6.2 million.", "date": "", "status": "Reported", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"}
+    ]},
+    "SWE": {"level": 2, "items": [
+      {"type": "Contract", "title": "Defence contract", "detail": "Sweden has a Palantir defence deal but would not disclose spending.", "date": "", "status": "Reported", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"}
+    ]},
+    "FIN": {"level": 2, "items": [
+      {"type": "Contract", "title": "Defence contract", "detail": "One of eight European countries with Palantir defence deals.", "date": "", "status": "Reported", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"}
+    ]},
+    "NOR": {"level": 3, "items": [
+      {"type": "Contract", "title": "Norwegian Customs", "detail": "Gotham passenger and vehicle screening since 2017; extended to 2030 with an option to 2035.", "date": "2017", "status": "Active", "source": "https://www.thebarentsobserver.com/news/norwegian-customs-extend-palantir-contract-despite-growing-scrutiny/452201"},
+      {"type": "Contract", "title": "Norwegian Police", "detail": "Police and customs have paid about €52 million in total. Reports conflict: one says a police system was cancelled in 2020 after ~NOK 100 million, another that police won't renew when the contract ends in 2027.", "date": "", "status": "Ending", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"},
+      {"type": "Controversy", "title": "Amnesty Norway criticises customs deal", "detail": "Customs extended the contract despite criticism.", "date": "2026", "source": "https://www.thebarentsobserver.com/news/norwegian-customs-extend-palantir-contract-despite-growing-scrutiny/452201"},
+      {"type": "Protest", "title": "Storebrand divests", "detail": "Norway's largest asset manager sold its ~$24 million stake over Palantir's work in the occupied Palestinian territories.", "date": "2024-10", "source": "https://www.calcalistech.com/ctechnews/article/hkfpidjgje"}
+    ]},
+    "GRC": {"level": 2, "items": [
+      {"type": "Contract", "title": "COVID-19 crisis centre", "detail": "Foundry hosted on AWS.", "date": "2020-08", "status": "Unclear", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "POL": {"level": 2, "items": [
+      {"type": "Contract", "title": "Ministry of National Defence letter of intent", "detail": "Letter of intent only, no contract reported.", "date": "2025-10", "status": "Letter of intent", "source": "https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026"}
+    ]},
+    "LTU": {"level": 2, "items": [
+      {"type": "Contract", "title": "Ministry of National Defence big-data hub", "detail": "Strategic partnership from 2023; contracts could exceed €67 million by 2031.", "date": "2023-04", "status": "Partnership", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"}
+    ]},
+    "ISR": {"level": 3, "items": [
+      {"type": "Contract", "title": "Ministry of Defence strategic partnership", "detail": "Partnership to support Israel's war effort, agreed at a Palantir board meeting held in Israel.", "date": "2024-01", "status": "Active", "source": "https://investigate.afsc.org/company/palantir"},
+      {"type": "Protest", "title": "Global protests and divestment over Gaza", "detail": "Campaigns call on institutions to cut ties with Palantir over its Israeli military work.", "date": "2026", "source": "https://afsc.org/gaza-genocide-companies"}
+    ]},
+    "AUS": {"level": 3, "items": [
+      {"type": "Contract", "title": "Department of Defence", "detail": "$7.6 million one-year contract (limited tender); Defence has spent over $26 million with Palantir since 2013, and Palantir staff work inside the department.", "date": "2013", "status": "Active", "source": "https://www.defenceconnect.com.au/industry/17697-palantir-secures-7-6-million-defence-contract-to-supply-ict-system-platform"},
+      {"type": "Contract", "title": "ASD, ACIC and AUSTRAC", "detail": "Contracts with the Signals Directorate, Criminal Intelligence Commission and financial-intelligence agency.", "date": "", "status": "Reported", "source": "https://michaelwest.com.au/palantir-surveils-everybody-but-its-own-misleading-accounts/"},
+      {"type": "Protest", "title": "Greens campaign to cancel contracts", "detail": "The Australian Greens are campaigning to end Palantir's government contracts.", "date": "2026", "source": "https://greens.org.au/campaigns/cancel-palantirs-contracts"}
+    ]},
+    "CHE": {"level": 1, "items": [
+      {"type": "Policy", "title": "Turned down at least nine times", "detail": "Swiss federal agencies rejected Palantir repeatedly over seven years, citing no need or reputational risk.", "date": "2026-02", "source": "https://www.republik.ch/2026/02/18/how-tenaciously-palantir-courted-switzerland"},
+      {"type": "Legal", "title": "Palantir sues magazine Republik", "detail": "Palantir sued over Republik's reporting; one report says Palantir lost on 22 of 23 claims (unconfirmed).", "date": "2025", "status": "Disputed", "source": "https://www.republik.ch/2026/02/18/how-tenaciously-palantir-courted-switzerland"}
+    ]},
+    "AUT": {"level": 1, "items": [
+      {"type": "Policy", "title": "Defence ministry deal fell through", "detail": "Deal failed despite a 2018 pilot.", "date": "2018", "status": "Ended", "source": "https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health"}
+    ]}
+  }
+}

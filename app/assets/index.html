@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>World Map</title>
+<script src="plotly.min.js"></script>
+<script src="data.js"></script>
+<style>
+:root{--bg:#fafaf8;--fg:#1d1d1b;--muted:#6b6b66;--card:#fff;--line:#e3e2dc;--accent:#2a6fdb;--warm:#c2410c;--soft:#f3f2ee;
+ --t-contract:#2a6fdb;--t-legal:#7c3aed;--t-controversy:#c2410c;--t-protest:#be123c;--t-policy:#0f766e;--t-issue:#a16207}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--fg:#ecebe6;--muted:#a3a29b;--card:#1e1e1c;--line:#33332f;--accent:#6ea0ff;--warm:#f08a4b;--soft:#262624;
+ --t-contract:#6ea0ff;--t-legal:#a78bfa;--t-controversy:#f08a4b;--t-protest:#fb7185;--t-policy:#2dd4bf;--t-issue:#facc15}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+h1{font-size:17px;margin:0;flex:1 1 auto}
+.tabs{display:flex;gap:6px}
+button{font:inherit;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+input{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);width:220px}
+.wrap{flex:1;display:grid;grid-template-columns:1fr 400px;min-height:0}
+#map{min-height:0}
+aside{border-left:1px solid var(--line);overflow:auto;padding:16px;background:var(--card)}
+aside h2{font-size:20px;margin:0 0 2px}
+aside h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:22px 0 8px}
+.sub{color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--soft);border-radius:8px;padding:8px 10px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:12px}
+.bar{height:8px;border-radius:4px;background:var(--accent);overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--warm)}
+.legend{font-size:12px;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.filters button{font-size:12px;padding:2px 8px}
+.item{border-left:3px solid var(--c);padding:6px 0 6px 10px;margin:6px 0}
+.item b{display:block}
+.item .meta{font-size:12px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;color:#fff;background:var(--c);margin-right:6px}
+.item a{color:var(--accent);font-size:12px}
+.none{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--warm);color:#fff}
+ol{padding-left:22px;margin:0}ol li{cursor:pointer;padding:2px 0}ol li:hover{color:var(--accent)}
+a.back{color:var(--accent);cursor:pointer;font-size:13px}
+svg text{fill:var(--muted);font-size:10px}
+.note{font-size:11px;color:var(--muted);margin-top:20px}
+@media (max-width:800px){.wrap{grid-template-columns:1fr;grid-template-rows:55vh auto}aside{border-left:0;border-top:1px solid var(--line)}input{width:100%}}
+</style></head><body>
+<header>
+ <h1>World map: offline population and Palantir use</h1>
+ <div class="tabs"><button id="b1" class="on">% offline</button><button id="b2">Palantir</button></div>
+ <input id="q" list="names" placeholder="Search a country…"><datalist id="names"></datalist>
+</header>
+<div class="wrap"><div id="map"></div><aside id="panel"></aside></div>
+<script>
+const byIso=Object.fromEntries(D.map(d=>[d.iso3,d]));
+const byName=Object.fromEntries(D.map(d=>[d.name.toLowerCase(),d]));
+const PC=PAL.countries, LV=PAL.levels;
+const TYPES=['Contract','Legal','Controversy','Protest','Policy','Issue'];
+const tcol=t=>`var(--t-${t.toLowerCase()})`;
+const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+const fg=dark?'#ecebe6':'#1d1d1b',land=dark?'#2a2a27':'#e6e5df',border=dark?'#444':'#fff';
+const fmt=n=>n==null?'n/a':n>=1e9?(n/1e9).toFixed(2)+' billion':n>=1e6?(n/1e6).toFixed(1)+' million':n>=1e3?Math.round(n/1e3)+' thousand':String(n);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const layout={geo:{showframe:false,showcoastlines:false,projection:{type:'natural earth'},bgcolor:'rgba(0,0,0,0)',showland:true,landcolor:land,showcountries:true,countrycolor:border},
+ margin:{l:0,r:0,t:0,b:0},paper_bgcolor:'rgba(0,0,0,0)',font:{color:fg}};
+const offline={type:'choropleth',locations:D.map(d=>d.iso3),z:D.map(d=>d.offline),
+ text:D.map(d=>`<b>${d.name}</b><br>${d.offline}% offline (${d.year})<br>${fmt(d.offline_people)} people<br><i>Click for details</i>`),hoverinfo:'text',
+ colorscale:[[0,'#e8f0fb'],[0.5,'#6b9be0'],[1,'#0b2e6b']],zmin:0,zmax:100,
+ colorbar:{title:'% offline',ticksuffix:'%',thickness:12},marker:{line:{width:0.4,color:border}}};
+const PI=Object.keys(PC).filter(i=>byIso[i]);
+const count=(i,t)=>PC[i].items.filter(x=>x.type==t).length;
+const LCOL=['#94a3b8','#f6c08a','#ee8a3c','#c2410c'];
+const pal={type:'choropleth',locations:PI,z:PI.map(i=>PC[i].level),
+ text:PI.map(i=>`<b>${byIso[i].name}</b><br>${LV[PC[i].level]}<br>${PC[i].items.length} items: `+TYPES.filter(t=>count(i,t)).map(t=>`${count(i,t)} ${t.toLowerCase()}`).join(', ')+'<br><i>Click for details</i>'),hoverinfo:'text',
+ colorscale:LCOL.flatMap((c,k)=>[[k/4,c],[(k+1)/4,c]]),zmin:0.5,zmax:4.5,
+ colorbar:{tickvals:[1,2,3,4],ticktext:[1,2,3,4].map(l=>LV[l]),thickness:12},marker:{line:{width:0.4,color:border}}};
+function show(w){
+ Plotly.react('map',[w==1?offline:pal],layout,{responsive:true,displaylogo:false,topojsonURL:'./'});
+ b1.classList.toggle('on',w==1);b2.classList.toggle('on',w==2);
+}
+function trend(h){
+ const W=360,H=90,p=22,xs=h.map(r=>r[0]),y0=xs[0],y1=xs[xs.length-1];
+ const X=y=>p+(W-2*p)*(y1==y0?0:(y-y0)/(y1-y0)),Y=v=>H-16-(H-26)*v/100;
+ return `<svg viewBox="0 0 ${W} ${H}" width="100%"><line x1="${p}" x2="${W-p}" y1="${Y(100)}" y2="${Y(100)}" stroke="var(--line)"/><line x1="${p}" x2="${W-p}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line)"/>
+ <text x="0" y="${Y(0)+3}">0%</text><text x="0" y="${Y(100)+3}">100%</text>
+ <polyline points="${h.map(r=>`${X(r[0]).toFixed(1)},${Y(r[1]).toFixed(1)}`).join(' ')}" fill="none" stroke="var(--warm)" stroke-width="2"/>
+ ${h.map(r=>`<circle cx="${X(r[0])}" cy="${Y(r[1])}" r="2.5" fill="var(--warm)"><title>${r[0]}: ${r[1]}% offline</title></circle>`).join('')}
+ <text x="${X(y0)-8}" y="${H-2}">${y0}</text><text x="${X(y1)-12}" y="${H-2}">${y1}</text></svg>`;
+}
+function items(list,id){
+ if(!list.length)return '';
+ const sorted=[...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ const types=TYPES.filter(t=>list.some(x=>x.type==t));
+ return `<div class="filters" id="${id}"><button class="on" data-t="">All (${list.length})</button>${types.map(t=>`<button data-t="${t}">${t} (${list.filter(x=>x.type==t).length})</button>`).join('')}</div>
+ <div id="${id}-list">${sorted.map(x=>`<div class="item" data-t="${esc(x.type)}" style="--c:${tcol(x.type)}"><span class="tag">${esc(x.type)}</span><b>${esc(x.title)}</b>${esc(x.detail)}
+ <div class="meta">${[x.date,x.status].filter(Boolean).map(esc).join(' · ')}${x.source?` · <a href="${esc(x.source)}" target="_blank" rel="noopener">Source</a>`:''}</div></div>`).join('')}</div>`;
+}
+function wireFilters(id){
+ const f=document.getElementById(id);if(!f)return;
+ f.onclick=e=>{const t=e.target.dataset.t;if(t===undefined)return;
+  f.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b==e.target));
+  document.querySelectorAll(`#${id}-list .item`).forEach(el=>el.style.display=!t||el.dataset.t==t?'':'none');};
+}
+const note=()=>`<p class="note">Offline data: World Bank / ITU, rebuilt ${esc(META.built)}. People offline = population × % offline.<br>Palantir list last updated ${esc(META.palantir_updated)}. Hand-compiled from news reports, company filings and official records; it is not complete and some items are single-source. Click "Source" to read the original.</p>`;
+function country(d){
+ const h=d.history.map(r=>[r[0],+(100-r[1]).toFixed(1)]),first=h[0],change=+(d.offline-first[1]).toFixed(1),pc=PC[d.iso3];
+ panel.innerHTML=`<a class="back" onclick="world()">← World overview</a>
+ <h2>${esc(d.name)}</h2><p class="sub">${esc(d.region)}</p>
+ <h3>Offline population</h3>
+ <div class="stats">
+  <div class="stat"><b>${d.offline}%</b><span>offline (${d.year})</span></div>
+  <div class="stat"><b>${fmt(d.offline_people)}</b><span>people offline (est.)</span></div>
+  <div class="stat"><b>#${d.rank}</b><span>of ${D.length} most offline</span></div>
+  <div class="stat"><b>${change>0?'+':''}${change} pts</b><span>change since ${first[0]}</span></div>
+ </div>
+ <div class="bar"><i style="width:${d.offline}%"></i></div>
+ <div class="legend">Orange = offline (${d.offline}%), blue = online (${d.online}%). Population ${fmt(d.pop)}.</div>
+ <h3>% offline over time</h3>${trend(h)}
+ <h3>Palantir: contracts, incidents and issues</h3>
+ ${pc?`<span class="pill" style="background:${LCOL[pc.level-1]}">${esc(LV[pc.level])}</span>`+items(pc.items,'cf')
+  :`<p class="none">No reported Palantir government contracts, incidents or issues in this list.</p>`}
+ ${note()}`;
+ wireFilters('cf');q.value=d.name;panel.scrollTop=0;
+}
+function world(){
+ const tot=D.reduce((s,d)=>s+(d.offline_people||0),0);
+ const top=[...D].sort((a,b)=>a.rank-b.rank).slice(0,10);
+ const most=[...D].filter(d=>d.offline_people).sort((a,b)=>b.offline_people-a.offline_people).slice(0,10);
+ const all=Object.values(PC).flatMap(c=>c.items);
+ const li=d=>`<li onclick="country(byIso['${d.iso3}'])">`;
+ panel.innerHTML=`<h2>World overview</h2><p class="sub">Click a country on the map, or search for one, to see everything about it.</p>
+ <div class="stats" style="margin-top:12px">
+  <div class="stat"><b>${fmt(tot)}</b><span>people offline in ${D.length} countries</span></div>
+  <div class="stat"><b>${PI.length}</b><span>countries in the Palantir list</span></div>
+  <div class="stat"><b>${all.filter(x=>x.type=='Contract').length}</b><span>Palantir contracts listed</span></div>
+  <div class="stat"><b>${all.length-all.filter(x=>x.type=='Contract').length}</b><span>incidents, lawsuits and issues</span></div>
+ </div>
+ <h3>Highest % offline</h3><ol>${top.map(d=>li(d)+`${esc(d.name)}: ${d.offline}%</li>`).join('')}</ol>
+ <h3>Most people offline</h3><ol>${most.map(d=>li(d)+`${esc(d.name)}: ${fmt(d.offline_people)}</li>`).join('')}</ol>
+ <h3>Palantir countries</h3><ol>${[...PI].sort((a,b)=>PC[b].level-PC[a].level||PC[b].items.length-PC[a].items.length).map(i=>li(byIso[i])+`${esc(byIso[i].name)}: ${PC[i].items.length} items <span class="sub">(${esc(LV[PC[i].level])})</span></li>`).join('')}</ol>
+ <h3>Palantir: international and Europe-wide</h3>${items([...PAL.summary,...PAL.international],'wf')}
+ ${note()}`;
+ wireFilters('wf');q.value='';panel.scrollTop=0;
+}
+names.innerHTML=D.map(d=>`<option value="${esc(d.name)}">`).join('');
+q.addEventListener('change',()=>{const d=byName[q.value.trim().toLowerCase()];if(d)country(d)});
+b1.onclick=()=>show(1);b2.onclick=()=>show(2);
+show(1);world();
+document.getElementById('map').on('plotly_click',e=>{const d=byIso[e.points[0].location];if(d)country(d)});
+</script></body></html>

@@ -1,0 +1,278 @@
+iso3,country,region,offline_%,online_%,year,population,people_offline,offline_rank,palantir_level
+AFG,Afghanistan,"Middle East, North Africa, Afghanistan & Pakistan",83.9,16.1,2024,43844111,36785209,8,none
+ALB,Albania,Europe & Central Asia,14.1,85.9,2024,2349580,331291,125,none
+DZA,Algeria,"Middle East, North Africa, Afghanistan & Pakistan",22.6,77.4,2024,47435312,10720381,93,none
+AND,Andorra,Europe & Central Asia,5.6,94.4,2024,82904,4643,173,none
+AGO,Angola,Sub-Saharan Africa ,59.3,40.7,2024,39040039,23150743,38,none
+ATG,Antigua and Barbuda,Latin America & Caribbean ,27.3,72.7,2024,94209,25719,80,none
+ARG,Argentina,Latin America & Caribbean ,10.3,89.7,2024,45851378,4722692,146,none
+ARM,Armenia,Europe & Central Asia,18.7,81.3,2024,3086700,577213,103,none
+ABW,Aruba,Latin America & Caribbean ,2.8,97.2,2017,108785,3046,190,none
+AUS,Australia,East Asia & Pacific,3.9,96.1,2024,27614411,1076962,187,Active contracts
+AUT,Austria,Europe & Central Asia,8.1,91.9,2025,9208163,745861,159,Rejected / issues only
+AZE,Azerbaijan,Europe & Central Asia,9.2,90.8,2025,10246996,942724,151,none
+BHS,"Bahamas, The",Latin America & Caribbean ,7.5,92.5,2024,403033,30227,163,none
+BHR,Bahrain,"Middle East, North Africa, Afghanistan & Pakistan",0,100,2024,1600366,0,205,none
+BGD,Bangladesh,South Asia,46.6,53.4,2024,175686899,81870095,50,none
+BRB,Barbados,Latin America & Caribbean ,29.6,70.4,2024,282623,83656,77,none
+BLR,Belarus,Europe & Central Asia,5.7,94.3,2024,9085991,517901,172,none
+BEL,Belgium,Europe & Central Asia,4.2,95.8,2024,11941781,501555,183,none
+BLZ,Belize,Latin America & Caribbean ,20.0,80.0,2024,422924,84585,99,none
+BEN,Benin,Sub-Saharan Africa ,66.0,34.0,2024,14814460,9777544,31,none
+BMU,Bermuda,North America,1.6,98.4,2017,64555,1033,200,none
+BTN,Bhutan,South Asia,8.7,91.3,2024,796682,69311,156,none
+BOL,Bolivia,Latin America & Caribbean ,20.3,79.7,2024,12581843,2554114,98,none
+BIH,Bosnia and Herzegovina,Europe & Central Asia,13.9,86.1,2024,3140095,436473,126,none
+BWA,Botswana,Sub-Saharan Africa ,42.5,57.5,2024,2562122,1088902,54,none
+BRA,Brazil,Latin America & Caribbean ,15.5,84.5,2024,212812405,32985923,120,none
+VGB,British Virgin Islands,Latin America & Caribbean ,22.3,77.7,2017,39732,8860,95,none
+BRN,Brunei Darussalam,East Asia & Pacific,3.7,96.3,2024,466330,17254,188,none
+BGR,Bulgaria,Europe & Central Asia,17.6,82.4,2024,6433302,1132261,111,none
+BFA,Burkina Faso,Sub-Saharan Africa ,71.7,28.3,2024,24074580,17261474,22,none
+BDI,Burundi,Sub-Saharan Africa ,91.4,8.6,2024,14390003,13152463,2,none
+CPV,Cabo Verde,Sub-Saharan Africa ,25.3,74.7,2024,527326,133413,86,none
+KHM,Cambodia,East Asia & Pacific,31.5,68.5,2024,17847982,5622114,72,none
+CMR,Cameroon,Sub-Saharan Africa ,53.7,46.3,2024,29879337,16045204,44,none
+CAN,Canada,North America,5.6,94.4,2024,41651653,2332493,174,none
+CYM,Cayman Islands,Latin America & Caribbean ,18.9,81.1,2017,75844,14335,102,none
+CAF,Central African Republic,Sub-Saharan Africa ,86.2,13.8,2024,5513282,4752449,5,none
+TCD,Chad,Sub-Saharan Africa ,87.4,12.6,2024,21003705,18357238,4,none
+CHL,Chile,Latin America & Caribbean ,4.4,95.6,2024,19859921,873837,181,none
+CHN,China,East Asia & Pacific,8.4,91.6,2025,1406585000,118153140,158,none
+COL,Colombia,Latin America & Caribbean ,20.7,79.3,2024,53425635,11059106,97,none
+COM,Comoros,Sub-Saharan Africa ,67.5,32.5,2024,882847,595922,28,none
+COD,"Congo, Dem. Rep.",Sub-Saharan Africa ,80.3,19.7,2024,112832473,90604476,16,none
+COG,"Congo, Rep.",Sub-Saharan Africa ,52.7,47.3,2024,6484437,3417298,46,none
+CRI,Costa Rica,Latin America & Caribbean ,12.8,87.2,2024,5152950,659578,129,none
+CIV,Cote d'Ivoire,Sub-Saharan Africa ,58.6,41.4,2024,32711547,19168967,40,none
+HRV,Croatia,Europe & Central Asia,16.4,83.6,2024,3876200,635697,116,none
+CUB,Cuba,Latin America & Caribbean ,29.5,70.5,2024,10937203,3226475,78,none
+CUW,Curacao,Latin America & Caribbean ,31.9,68.1,2017,156263,49848,70,none
+CYP,Cyprus,Europe & Central Asia,10.4,89.6,2024,1370754,142558,145,none
+CZE,Czechia,Europe & Central Asia,12.3,87.7,2024,10886878,1339086,132,none
+DNK,Denmark,Europe & Central Asia,0.2,99.8,2024,6009169,12018,204,Active contracts
+DJI,Djibouti,"Middle East, North Africa, Afghanistan & Pakistan",34.7,65.3,2024,1184076,410874,64,none
+DMA,Dominica,Latin America & Caribbean ,18.0,82.0,2024,65871,11857,106,none
+DOM,Dominican Republic,Latin America & Caribbean ,9.0,91.0,2024,11520487,1036844,154,none
+ECU,Ecuador,Latin America & Caribbean ,22.8,77.2,2024,18289896,4170096,92,none
+EGY,"Egypt, Arab Rep.","Middle East, North Africa, Afghanistan & Pakistan",25.4,74.6,2024,118365995,30064963,85,none
+SLV,El Salvador,Latin America & Caribbean ,33.5,66.5,2024,6365503,2132444,67,none
+GNQ,Equatorial Guinea,Sub-Saharan Africa ,36.7,63.3,2024,1938431,711404,60,none
+ERI,Eritrea,Sub-Saharan Africa ,85.7,14.3,2020,3607003,3091202,6,none
+EST,Estonia,Europe & Central Asia,7.8,92.2,2024,1366475,106585,162,none
+SWZ,Eswatini,Sub-Saharan Africa ,36.6,63.4,2024,1256174,459760,61,none
+ETH,Ethiopia,Sub-Saharan Africa ,78.1,21.9,2024,135472051,105803672,18,none
+FRO,Faroe Islands,Europe & Central Asia,2.4,97.6,2017,54900,1318,194,none
+FJI,Fiji,East Asia & Pacific,25.3,74.7,2024,933154,236088,87,none
+FIN,Finland,Europe & Central Asia,6.3,93.7,2024,5646436,355725,169,"Limited, ending or letter of intent"
+FRA,France,Europe & Central Asia,11.3,88.7,2024,68720337,7765398,138,"Limited, ending or letter of intent"
+PYF,French Polynesia,East Asia & Pacific,27.3,72.7,2017,282465,77113,81,none
+GAB,Gabon,Sub-Saharan Africa ,31.3,68.7,2024,2593130,811650,73,none
+GMB,"Gambia, The",Sub-Saharan Africa ,50.5,49.5,2024,2822093,1425157,48,none
+GEO,Georgia,Europe & Central Asia,16.2,83.8,2024,3935766,637594,117,none
+DEU,Germany,Europe & Central Asia,6.5,93.5,2024,83491249,5426931,167,Active contracts
+GHA,Ghana,Sub-Saharan Africa ,27.8,72.2,2024,35064272,9747868,79,none
+GIB,Gibraltar,Europe & Central Asia,5.6,94.4,2016,40126,2247,175,none
+GRC,Greece,Europe & Central Asia,13.7,86.3,2024,10413962,1426713,127,"Limited, ending or letter of intent"
+GRL,Greenland,Europe & Central Asia,30.5,69.5,2017,56831,17333,74,none
+GRD,Grenada,Latin America & Caribbean ,29.8,70.2,2024,117303,34956,76,none
+GUM,Guam,East Asia & Pacific,19.5,80.5,2017,168999,32955,100,none
+GTM,Guatemala,Latin America & Caribbean ,39.8,60.2,2024,18687881,7437777,58,none
+GIN,Guinea,Sub-Saharan Africa ,66.7,33.3,2024,15099727,10071518,29,none
+GNB,Guinea-Bissau,Sub-Saharan Africa ,70.2,29.8,2024,2249515,1579160,24,none
+GUY,Guyana,Latin America & Caribbean ,17.0,83.0,2024,835986,142118,113,none
+HTI,Haiti,Latin America & Caribbean ,52.1,47.9,2024,11906095,6203075,47,none
+HND,Honduras,Latin America & Caribbean ,41.4,58.6,2024,11005850,4556422,55,none
+HKG,"Hong Kong SAR, China",East Asia & Pacific,4.2,95.8,2024,7498900,314954,184,none
+HUN,Hungary,Europe & Central Asia,6.2,93.8,2024,9514251,589884,170,none
+ISL,Iceland,Europe & Central Asia,1.8,98.2,2024,392404,7063,198,none
+IND,India,South Asia,30,70,2025,1463865525,439159658,75,none
+IDN,Indonesia,East Asia & Pacific,27.2,72.8,2024,285721236,77716176,82,none
+IRN,"Iran, Islamic Rep.","Middle East, North Africa, Afghanistan & Pakistan",14.7,85.3,2024,92417681,13585399,123,none
+IRQ,Iraq,"Middle East, North Africa, Afghanistan & Pakistan",18.5,81.5,2024,47020774,8698843,104,none
+IRL,Ireland,Europe & Central Asia,2.8,97.2,2024,5484367,153562,191,none
+ISR,Israel,"Middle East, North Africa, Afghanistan & Pakistan",11.8,88.2,2024,10122800,1194490,135,Active contracts
+ITA,Italy,Europe & Central Asia,10.8,89.2,2024,58915656,6362891,140,"Limited, ending or letter of intent"
+JAM,Jamaica,Latin America & Caribbean ,9.9,90.1,2024,2837077,280871,150,none
+JPN,Japan,East Asia & Pacific,14.5,85.5,2024,123366734,17888176,124,none
+JOR,Jordan,"Middle East, North Africa, Afghanistan & Pakistan",4.4,95.6,2024,11520684,506910,182,none
+KAZ,Kazakhstan,Europe & Central Asia,6.6,93.4,2024,20843754,1375688,166,none
+KEN,Kenya,Sub-Saharan Africa ,65.0,35.0,2024,57532493,37396120,32,none
+KIR,Kiribati,East Asia & Pacific,10.6,89.4,2024,136488,14468,142,none
+KOR,"Korea, Rep.",East Asia & Pacific,2.1,97.9,2024,51684564,1085376,195,none
+XKX,Kosovo,Europe & Central Asia,10.6,89.4,2018,1576876,167149,143,none
+KWT,Kuwait,"Middle East, North Africa, Afghanistan & Pakistan",0,100,2025,4865298,0,206,none
+KGZ,Kyrgyz Republic,Europe & Central Asia,8.0,92.0,2024,7343064,587445,160,none
+LAO,Lao PDR,East Asia & Pacific,34.4,65.6,2024,7873046,2708328,65,none
+LVA,Latvia,Europe & Central Asia,7.3,92.7,2024,1847785,134888,164,none
+LBN,Lebanon,"Middle East, North Africa, Afghanistan & Pakistan",19.4,80.6,2024,5849421,1134788,101,none
+LSO,Lesotho,Sub-Saharan Africa ,48.2,51.8,2024,2363325,1139123,49,none
+LBR,Liberia,Sub-Saharan Africa ,67.8,32.2,2024,5731206,3885758,27,none
+LBY,Libya,"Middle East, North Africa, Afghanistan & Pakistan",18.0,82.0,2024,7458555,1342540,107,none
+LIE,Liechtenstein,Europe & Central Asia,1.7,98.3,2024,41024,697,199,none
+LTU,Lithuania,Europe & Central Asia,10.8,89.2,2024,2888774,311988,141,"Limited, ending or letter of intent"
+LUX,Luxembourg,Europe & Central Asia,0.9,99.1,2025,686970,6183,203,none
+MAC,"Macao SAR, China",East Asia & Pacific,10.2,89.8,2024,685900,69962,147,none
+MDG,Madagascar,Sub-Saharan Africa ,81.3,18.7,2024,32740678,26618171,13,none
+MWI,Malawi,Sub-Saharan Africa ,81.0,19.0,2024,22216120,17995057,15,none
+MYS,Malaysia,East Asia & Pacific,2.0,98.0,2024,35977838,719557,196,none
+MDV,Maldives,South Asia,14.8,85.2,2024,529676,78392,122,none
+MLI,Mali,Sub-Saharan Africa ,63.2,36.8,2024,25198821,15925655,35,none
+MLT,Malta,"Middle East, North Africa, Afghanistan & Pakistan",6.1,93.9,2024,579704,35362,171,none
+MHL,Marshall Islands,East Asia & Pacific,34.1,65.9,2024,36282,12372,66,none
+MRT,Mauritania,Sub-Saharan Africa ,54.2,45.8,2024,5315065,2880765,43,none
+MUS,Mauritius,Sub-Saharan Africa ,26.7,73.3,2024,1243741,332079,84,none
+MEX,Mexico,Latin America & Caribbean ,16.9,83.1,2024,131946900,22299026,115,none
+FSM,"Micronesia, Fed. Sts.",East Asia & Pacific,60.5,39.5,2024,113683,68778,36,none
+MDA,Moldova,Europe & Central Asia,22.6,77.4,2024,2360527,533479,94,none
+MCO,Monaco,Europe & Central Asia,1.0,99.0,2024,38341,383,201,none
+MNG,Mongolia,East Asia & Pacific,14.9,85.1,2024,3568978,531778,121,none
+MNE,Montenegro,Europe & Central Asia,11.1,88.9,2024,623129,69167,139,none
+MAR,Morocco,"Middle East, North Africa, Afghanistan & Pakistan",8.8,91.2,2024,38430770,3381908,155,none
+MOZ,Mozambique,Sub-Saharan Africa ,79.5,20.5,2024,35631653,28327164,17,none
+MMR,Myanmar,East Asia & Pacific,54.6,45.4,2020,54850648,29948454,42,none
+NAM,Namibia,Sub-Saharan Africa ,35.1,64.9,2024,3092816,1085578,63,none
+NRU,Naoero,East Asia & Pacific,17.0,83.0,2024,12025,2044,114,none
+NPL,Nepal,South Asia,53.7,46.3,2024,29618118,15904929,45,none
+NLD,Netherlands,Europe & Central Asia,3.0,97.0,2024,18087633,542629,189,"Limited, ending or letter of intent"
+NCL,New Caledonia,East Asia & Pacific,18.0,82.0,2017,295333,53160,108,none
+NZL,New Zealand,East Asia & Pacific,6.5,93.5,2024,5324700,346106,168,none
+NIC,Nicaragua,Latin America & Caribbean ,38.6,61.4,2024,7007502,2704896,59,none
+NER,Niger,Sub-Saharan Africa ,84.4,15.6,2024,27917831,23562649,7,none
+NGA,Nigeria,Sub-Saharan Africa ,58.8,41.2,2024,237527782,139666336,39,none
+MKD,North Macedonia,Europe & Central Asia,6.9,93.1,2025,1820909,125643,165,none
+NOR,Norway,Europe & Central Asia,1,99,2024,5610870,56109,202,Active contracts
+OMN,Oman,"Middle East, North Africa, Afghanistan & Pakistan",4.7,95.3,2024,5494691,258250,179,none
+PAK,Pakistan,"Middle East, North Africa, Afghanistan & Pakistan",42.7,57.3,2024,255219554,108978750,53,none
+PLW,Palau,East Asia & Pacific,16.1,83.9,2024,17663,2844,118,none
+PAN,Panama,Latin America & Caribbean ,27.2,72.8,2024,4571189,1243363,83,none
+PNG,Papua New Guinea,East Asia & Pacific,81.2,18.8,2024,10762817,8739407,14,none
+PRY,Paraguay,Latin America & Caribbean ,18.4,81.6,2024,7013078,1290406,105,none
+PER,Peru,Latin America & Caribbean ,18.0,82.0,2024,34576665,6223800,109,none
+PHL,Philippines,East Asia & Pacific,32.7,67.3,2024,116786962,38189337,68,none
+POL,Poland,Europe & Central Asia,11.4,88.6,2024,36435861,4153688,137,"Limited, ending or letter of intent"
+PRT,Portugal,Europe & Central Asia,11.5,88.5,2024,10804871,1242560,136,none
+PRI,Puerto Rico (US),Latin America & Caribbean ,12.7,87.3,2022,3184835,404474,130,none
+QAT,Qatar,"Middle East, North Africa, Afghanistan & Pakistan",1.9,98.1,2024,2972215,56472,197,none
+ROU,Romania,Europe & Central Asia,8.7,91.3,2024,19020271,1654764,157,none
+RUS,Russian Federation,Europe & Central Asia,5.6,94.4,2024,143513328,8036746,176,none
+RWA,Rwanda,Sub-Saharan Africa ,68.3,31.7,2024,14569341,9950860,26,none
+SMR,San Marino,Europe & Central Asia,2.6,97.4,2024,34109,887,193,none
+STP,Sao Tome and Principe,Sub-Saharan Africa ,40.9,59.1,2024,240254,98264,56,none
+SAU,Saudi Arabia,"Middle East, North Africa, Afghanistan & Pakistan",0,100,2024,36973555,0,207,none
+SEN,Senegal,Sub-Saharan Africa ,39.9,60.1,2024,18931966,7553854,57,none
+SRB,Serbia,Europe & Central Asia,12.3,87.7,2024,6549143,805545,133,none
+SYC,Seychelles,Sub-Saharan Africa ,12.2,87.8,2024,122730,14973,134,none
+SLE,Sierra Leone,Sub-Saharan Africa ,74.9,25.1,2024,8819794,6606026,20,none
+SGP,Singapore,East Asia & Pacific,5.6,94.4,2024,6111175,342226,177,none
+SVK,Slovak Republic,Europe & Central Asia,10.2,89.8,2024,5413813,552209,148,none
+SVN,Slovenia,Europe & Central Asia,9.2,90.8,2024,2130986,196051,152,none
+SLB,Solomon Islands,East Asia & Pacific,71.0,29.0,2024,838645,595438,23,none
+SOM,"Somalia, Fed. Rep.",Sub-Saharan Africa ,72.1,27.9,2024,19654739,14171067,21,none
+ZAF,South Africa,Sub-Saharan Africa ,21.6,78.4,2024,64747319,13985421,96,none
+SSD,South Sudan,Sub-Saharan Africa ,93.3,6.7,2019,12188788,11372139,1,none
+ESP,Spain,Europe & Central Asia,4.2,95.8,2024,49355143,2072916,185,"Limited, ending or letter of intent"
+LKA,Sri Lanka,South Asia,45.4,54.6,2024,21756000,9877224,51,none
+KNA,St. Kitts and Nevis,Latin America & Caribbean ,23.1,76.9,2024,46922,10839,91,none
+LCA,St. Lucia,Latin America & Caribbean ,31.8,68.2,2024,180149,57287,71,none
+VCT,St. Vincent and the Grenadines,Latin America & Caribbean ,23.8,76.2,2024,99924,23782,88,none
+SDN,Sudan,Sub-Saharan Africa ,81.4,18.6,2017,51662147,42052988,12,none
+SUR,Suriname,Latin America & Caribbean ,12.6,87.4,2023,639850,80621,131,none
+SWE,Sweden,Europe & Central Asia,4.2,95.8,2025,10596620,445058,186,"Limited, ending or letter of intent"
+CHE,Switzerland,Europe & Central Asia,2.7,97.3,2025,9092436,245496,192,Rejected / issues only
+SYR,Syrian Arab Republic,"Middle East, North Africa, Afghanistan & Pakistan",66.2,33.8,2018,25620427,16960723,30,none
+TJK,Tajikistan,Europe & Central Asia,44.2,55.8,2024,10786734,4767736,52,none
+TZA,Tanzania,Sub-Saharan Africa ,68.8,31.2,2024,70545865,48535555,25,none
+THA,Thailand,East Asia & Pacific,9.1,90.9,2024,71619863,6517408,153,none
+TLS,Timor-Leste,East Asia & Pacific,65.0,35.0,2021,1418517,922036,33,none
+TGO,Togo,Sub-Saharan Africa ,60.5,39.5,2024,8591626,5197934,37,none
+TON,Tonga,East Asia & Pacific,32.6,67.4,2024,103742,33820,69,none
+TTO,Trinidad and Tobago,Latin America & Caribbean ,17.8,82.2,2024,1367764,243462,110,none
+TUN,Tunisia,"Middle East, North Africa, Afghanistan & Pakistan",23.5,76.5,2024,12348573,2901915,89,none
+TUR,Turkiye,Europe & Central Asia,10.2,89.8,2025,85878556,8759613,149,none
+TKM,Turkmenistan,Europe & Central Asia,82.0,18.0,2016,7618847,6247455,11,none
+TUV,Tuvalu,East Asia & Pacific,64.8,35.2,2017,9492,6151,34,none
+UGA,Uganda,Sub-Saharan Africa ,91.1,8.9,2024,51384894,46811638,3,none
+UKR,Ukraine,Europe & Central Asia,17.5,82.5,2024,38980376,6821566,112,Active contracts
+ARE,United Arab Emirates,"Middle East, North Africa, Afghanistan & Pakistan",0,100,2024,11513149,0,208,none
+GBR,United Kingdom,Europe & Central Asia,4.5,95.5,2024,69487000,3126915,180,Extensive use
+USA,United States,North America,5.3,94.7,2024,341784857,18114597,178,Extensive use
+URY,Uruguay,Latin America & Caribbean ,8.0,92.0,2024,3384688,270775,161,none
+UZB,Uzbekistan,Europe & Central Asia,10.5,89.5,2024,37053428,3890610,144,none
+VUT,Vanuatu,East Asia & Pacific,77.6,22.4,2015,335169,260091,19,none
+VEN,"Venezuela, RB",Latin America & Caribbean ,23.3,76.7,2024,28516896,6644437,90,none
+VNM,Viet Nam,East Asia & Pacific,15.8,84.2,2024,101598527,16052567,119,none
+VIR,Virgin Islands (U.S.),Latin America & Caribbean ,35.6,64.4,2017,103792,36950,62,none
+PSE,West Bank and Gaza,"Middle East, North Africa, Afghanistan & Pakistan",13.4,86.6,2023,5413596,725422,128,none
+YEM,"Yemen, Rep.","Middle East, North Africa, Afghanistan & Pakistan",82.5,17.5,2019,41773878,34463449,10,none
+ZMB,Zambia,Sub-Saharan Africa ,82.9,17.1,2024,21913874,18166602,9,none
+ZWE,Zimbabwe,Sub-Saharan Africa ,58.4,41.6,2024,16950795,9899264,41,none
+
+iso3,country,type,date,status,title,detail,source
+USA,United States,Contract,2025-07,Active,US Army enterprise agreement,"Up to $10 billion over 10 years, consolidating Army software contracts.",https://app.govly.com/public/signals/177815
+USA,United States,Contract,2026-08,Reported,Maven Smart System expansion,Reported $618 million expansion of the Army's AI targeting and battlefield-data platform.,https://app.govly.com/public/signals/177815
+USA,United States,Contract,2026-02,Reported,Department of Homeland Security blanket purchase agreement,"Five-year agreement worth up to $1 billion for AI and data analytics, paid through task orders.",https://x.com/PalantirOg/status/2024824231221953012
+USA,United States,Contract,2026-04,Active,USDA food-supply deal,$300 million deal with the Department of Agriculture to manage farmland and supply-chain risk.,https://www.cnbc.com/2026/04/22/palantir-inks-300-million-deal-with-usda-to-safeguard-food-supply.html
+USA,United States,Contract,2025,Active,ICE: ImmigrationOS,About $30 million platform to track and prioritise people for deportation.,https://www.404media.co/this-is-palantirs-justification-for-building-ices-master-database/
+USA,United States,Contract,2025-09,Active,Treasury common API layer,"Developer platform, workflow automation and data analytics for the Treasury.",https://www.sec.gov/Archives/edgar/data/0001321655/000132165526000041/pltr-20260630.htm
+USA,United States,Controversy,2025-06,,IRS 'mega API' and tax data,"Senators Wyden and Markey and Rep. Ocasio-Cortez demanded answers over Palantir helping DOGE build a searchable database linking tax data with other records, saying it likely breaks the Privacy Act and tax privacy laws.",https://www.markey.senate.gov/news/press-releases/markey-joins-wyden-ocasio-cortez-to-demand-answers-from-palantir-about-plans-to-build-irs-mega-database-of-american-citizens
+USA,United States,Controversy,2026-01,,ICE 'ELITE' tool uses Medicaid data,Reported tool that pulls Medicaid and other government data to build dossiers and arrest leads. Criticised by the EFF and KFF.,https://fortune.com/2026/01/26/ice-allegedly-uses-palantir-tool-tracking-medicaid-data
+USA,United States,Controversy,2026-02,,IRS contracts under scrutiny,Tax Notes reports scrutiny of Palantir's IRS contracts amid the tax-data controversy.,https://www.taxnotes.com/featured-news/palantir-contracts-under-scrutiny-amid-irs-tax-data-controversy/2026/02/18/7tzns
+USA,United States,Legal,2016-10,,Palantir wins lawsuit against the US Army,Court of Federal Claims ruled the Army broke a 1994 procurement law by not considering commercial software. Palantir later won a major Army contract.,https://thehill.com/policy/technology/303630-palantir-wins-lawsuit-over-us-army-data-system/
+USA,United States,Legal,2025,Pending,Sued by San Antonio defence contractor,"Guardian Premier Solutions alleges fraud and breach of contract over a $709,000 'partnership program'.",https://finance.yahoo.com/news/ai-software-giant-palantir-sued-130000558.html
+USA,United States,Legal,2025-04,,Shareholder lawsuits dismissed,Securities and derivative suits against Palantir executives were dismissed in April 2025; one was appealed to the Tenth Circuit.,https://www.sec.gov/Archives/edgar/data/1321655/000132165525000106/pltr-20250630.htm
+USA,United States,Protest,2026-06,,Presbyterian Church (USA) divests,Voted unanimously to sell about $2.5 million of Palantir stock.,https://afsc.org/purge-palantir
+USA,United States,Protest,2025,,University of San Francisco divests,Divested from defence companies including Palantir after student protests.,https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/
+GBR,United Kingdom,Contract,2025-12,Active,Ministry of Defence enterprise agreement,Since 2020; enterprise agreement Dec 2022; new deal of about £240 million in Dec 2025. UK deals total about £992 million.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+GBR,United Kingdom,Contract,2023-11,Active,NHS England Federated Data Platform,£330 million contract envelope to link hospital data.,https://www.foxglove.org.uk/?p=10469
+GBR,United Kingdom,Contract,2026-03,Pilot,Financial Conduct Authority,"£30,000 a month to analyse sensitive FCA data.",https://novaramedia.com/2026/03/24/palantir-has-been-awarded-yet-another-uk-government-contract/
+GBR,United Kingdom,Contract,2026,Active,Home Office firearms licensing,About £9 million replacement system.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+GBR,United Kingdom,Contract,2026,Active,AWE Nuclear Security Technologies,About £15 million via Crown Commercial Service.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+GBR,United Kingdom,Contract,2025,Active,Leicestershire Police / EMSOU,"About £800,000.",https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+GBR,United Kingdom,Contract,2020,Unclear,Cabinet Office 'Border Flow',Brexit border data platform.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+GBR,United Kingdom,Legal,2023,,Foxglove legal challenge to NHS deal,"Foxglove, Doctors' Association UK, National Pensioners Convention and Just Treatment argued the data platform had no legal basis.",https://www.computing.co.uk/news/4152103/legal-challenge-launched-nhs-palantir-deal
+GBR,United Kingdom,Legal,2024-02,,Good Law Project sues over redacted NHS contract,417 of 586 contract pages were blanked out.,https://www.theregister.com/2024/02/20/legal_campaigners_challenge_government_decision/
+GBR,United Kingdom,Controversy,2026-07,,MPs urge ending NHS contract,Cross-party Health and Social Care Committee urged ministers to consider ending the contract; NHS England's chief questioned its benefit assessments (8 July 2026).,https://www.computing.co.uk/news/2026/government/mps-urge-government-cancel-palantir-nhs-contract
+GBR,United Kingdom,Legal,2026-10,Settled,"Met Police deal blocked, Palantir sues, then settles",London's Mayor's Office blocked a ~£50 million Met Police AI deal in May 2026. Palantir sued in June; both sides settled on 14 Oct 2026 and Palantir was let back into bidding.,https://www.itv.com/news/london/2026-10-14/tech-giant-palantir-and-london-mayors-office-settle-legal-dispute
+GBR,United Kingdom,Policy,2026-02-10,,Commons debate on MoD Palantir contracts,Ministry of Defence Palantir contracts debated in Parliament.,https://hansard.parliament.uk/Commons/2026-02-10/debates/FECED111-4FA8-4343-BFAF-18D6C13808D0/MinistryOfDefencePalantirContracts
+GBR,United Kingdom,Protest,2026-10,,Council pension investments criticised,"A Labour council's Palantir investments rose 1,200% during the Gaza war, Novara Media reports.",https://novaramedia.com/2026/10/07/labour-councils-palantir-investments-increased-1200-during-gaza-genocide/
+UKR,Ukraine,Contract,2022-06,Active,Ministry of Digital Transformation,"Foundry/AIP; started June 2022, MoU May 2023.",https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+UKR,Ukraine,Contract,2023-02,Active,Ministry of Defence and Armed Forces,Battlefield data and targeting support.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+UKR,Ukraine,Contract,2026-01,Active,Brave1 Dataroom,Defence-tech data room on Foundry.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DEU,Germany,Contract,2017,Active,Hesse police 'HessenDATA',Gotham crime analysis.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DEU,Germany,Contract,2020,Active,North Rhine-Westphalia police 'DAR',About €14 million.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DEU,Germany,Contract,2024-12,Active,Bavaria police 'VeRA',Went live 25 Dec 2024.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DEU,Germany,Contract,2025,Pending law change,Baden-Württemberg police,Five-year deal of about €25 million signed before there was a legal basis; Greens and CDU later agreed to change the police law to allow it.,https://posteo.de/en/news/germany-police-in-baden-württemberg-will-be-able-to-use-palantir
+DEU,Germany,Legal,2023-02,,Constitutional Court ruling,Use of Palantir-based automated analysis in Hesse and Hamburg ruled unconstitutional after a case by the GFF civil-rights group.,https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/
+DEU,Germany,Policy,2025,Under review,Federal government reviews nationwide use,Interior Minister Dobrindt examined using Palantir for federal police; SPD and Greens opposed. No final decision reported.,https://www.yahoo.com/news/articles/germany-weighs-nationwide-palantirs-controversial-161014140.html
+DEU,Germany,Policy,2026-04,,Bundeswehr procurement not awarded to Palantir,Armed forces chose not to award a procurement to Palantir.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+FRA,France,Contract,2016,Being replaced,DGSI domestic intelligence,Gotham since 2016 for counter-terrorism; renewed Dec 2025.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+FRA,France,Policy,2026-06,,Switch to French supplier ChapsVision,"DGSI to replace Palantir, citing sovereignty concerns.",https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DNK,Denmark,Contract,2016,Active,National police 'POL-INTEL',Gotham; Danish police have paid about €28 million.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+DNK,Denmark,Contract,2017,Active,Security and Intelligence Service 'PET-INTEL',Gotham.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+DNK,Denmark,Contract,,Active,Defence contract,Denmark is one of eight European countries with Palantir defence deals.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+DNK,Denmark,Policy,2026,,Plans to seek local alternatives,Denmark announced it will look for alternatives to Palantir.,https://euronews.com/next/2026/06/05/why-are-european-governments-reevaluating-their-agreements-with-us-defence-tech-contractor
+NLD,Netherlands,Contract,2010,Active,Ministry of Defence,In use since 2010. Government would not disclose spending.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+NLD,Netherlands,Contract,2012,Unclear,National Police,Deployment since 2012; current status unclear.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+NLD,Netherlands,Policy,2026-06,,European alternative within two years,Government said a full alternative to Palantir must be ready within two years.,https://euronews.com/next/2026/06/05/why-are-european-governments-reevaluating-their-agreements-with-us-defence-tech-contractor
+NLD,Netherlands,Protest,2026-04,,Pension fund ABP divests,The Dutch civil-service pension fund sold its Palantir stake.,https://www.business-humanrights.org/en/latest-news/investor-pressure-on-palantir-builds-in-response-to-human-rights-and-governance-concerns-sparking-examples-of-divestment/
+ESP,Spain,Contract,2023,Ending,Armed Forces Intelligence Center (CIFAS),About €16.5 million; reportedly expires Nov 2026.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+ESP,Spain,Policy,2026-07,,State companies told not to sign or renew,"Reported instruction to state-controlled firms (including Telefónica, Indra, Navantia) not to sign new or renewed Palantir contracts.",https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+ITA,Italy,Contract,,Reported,Ministry of Defence,About €6.2 million.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+SWE,Sweden,Contract,,Reported,Defence contract,Sweden has a Palantir defence deal but would not disclose spending.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+FIN,Finland,Contract,,Reported,Defence contract,One of eight European countries with Palantir defence deals.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+NOR,Norway,Contract,2017,Active,Norwegian Customs,Gotham passenger and vehicle screening since 2017; extended to 2030 with an option to 2035.,https://www.thebarentsobserver.com/news/norwegian-customs-extend-palantir-contract-despite-growing-scrutiny/452201
+NOR,Norway,Contract,,Ending,Norwegian Police,"Police and customs have paid about €52 million in total. Reports conflict: one says a police system was cancelled in 2020 after ~NOK 100 million, another that police won't renew when the contract ends in 2027.",https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+NOR,Norway,Controversy,2026,,Amnesty Norway criticises customs deal,Customs extended the contract despite criticism.,https://www.thebarentsobserver.com/news/norwegian-customs-extend-palantir-contract-despite-growing-scrutiny/452201
+NOR,Norway,Protest,2024-10,,Storebrand divests,Norway's largest asset manager sold its ~$24 million stake over Palantir's work in the occupied Palestinian territories.,https://www.calcalistech.com/ctechnews/article/hkfpidjgje
+GRC,Greece,Contract,2020-08,Unclear,COVID-19 crisis centre,Foundry hosted on AWS.,https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+POL,Poland,Contract,2025-10,Letter of intent,Ministry of National Defence letter of intent,"Letter of intent only, no contract reported.",https://ciphercue.com/blog/palantir-in-europe-governments-companies-2026
+LTU,Lithuania,Contract,2023-04,Partnership,Ministry of National Defence big-data hub,Strategic partnership from 2023; contracts could exceed €67 million by 2031.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
+ISR,Israel,Contract,2024-01,Active,Ministry of Defence strategic partnership,"Partnership to support Israel's war effort, agreed at a Palantir board meeting held in Israel.",https://investigate.afsc.org/company/palantir
+ISR,Israel,Protest,2026,,Global protests and divestment over Gaza,Campaigns call on institutions to cut ties with Palantir over its Israeli military work.,https://afsc.org/gaza-genocide-companies
+AUS,Australia,Contract,2013,Active,Department of Defence,"$7.6 million one-year contract (limited tender); Defence has spent over $26 million with Palantir since 2013, and Palantir staff work inside the department.",https://www.defenceconnect.com.au/industry/17697-palantir-secures-7-6-million-defence-contract-to-supply-ict-system-platform
+AUS,Australia,Contract,,Reported,"ASD, ACIC and AUSTRAC","Contracts with the Signals Directorate, Criminal Intelligence Commission and financial-intelligence agency.",https://michaelwest.com.au/palantir-surveils-everybody-but-its-own-misleading-accounts/
+AUS,Australia,Protest,2026,,Greens campaign to cancel contracts,The Australian Greens are campaigning to end Palantir's government contracts.,https://greens.org.au/campaigns/cancel-palantirs-contracts
+CHE,Switzerland,Policy,2026-02,,Turned down at least nine times,"Swiss federal agencies rejected Palantir repeatedly over seven years, citing no need or reputational risk.",https://www.republik.ch/2026/02/18/how-tenaciously-palantir-courted-switzerland
+CHE,Switzerland,Legal,2025,Disputed,Palantir sues magazine Republik,Palantir sued over Republik's reporting; one report says Palantir lost on 22 of 23 claims (unconfirmed).,https://www.republik.ch/2026/02/18/how-tenaciously-palantir-courted-switzerland
+AUT,Austria,Policy,2018,Ended,Defence ministry deal fell through,Deal failed despite a 2018 pilot.,https://www.ftm.eu/articles/palantir-europe-spending-defence-intelligence-health
